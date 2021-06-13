@@ -1,10 +1,5 @@
-from typing import Tuple
-from typing_extensions import TypeGuard
 from django.contrib.auth.models import User
 from django.db import models
-from django.db.models.base import Model
-from django.db.models.fields import IntegerField
-from django.db.models.query import BaseIterable
 
 
 class Category(models.Model):
@@ -53,11 +48,11 @@ class Category(models.Model):
     gps_lattitude = models.DecimalField(max_digits=4, decimal_places=20, blank=True, null=True)
     gps_altitude = models.DecimalField(max_digits=4, decimal_places=20, blank=True, null=True)
     gps_accuracy = models.DecimalField(max_digits=4, decimal_places=20, blank=True, null=True)
-    owner_picture = models.ImageField()
-    goods_services_picture = models.ImageField()
-    business_permit_picture = models.ImageField()
-    others1_picture = models.ImageField()
-    others2_picture = models.ImageField()
+    owner_picture = models.ImageField(upload_to=None, height_field=None, width_field=None, max_length=None)
+    goods_services_picture = models.ImageField(upload_to=None, height_field=None, width_field=None, max_length=None)
+    business_permit_picture = models.ImageField(upload_to=None, height_field=None, width_field=None, max_length=None)
+    others1_picture = models.ImageField(upload_to=None, height_field=None, width_field=None, max_length=None)
+    others2_picture = models.ImageField(upload_to=None, height_field=None, width_field=None, max_length=None)
     business_owner_name = models.CharField(max_length=255)
     business_owner_number = models.CharField(max_length=100, blank=True, null=True)
     business_representative = models.CharField(max_length=255, blank=True, null=True)
@@ -110,4 +105,14 @@ class Category(models.Model):
     location_status = models.CharField(max_length=20, choices=LOCATION, default=OWNED, blank=True, null=True)
     location_rental_amount = models.DecimalField(max_digits=7, decimal_places=2, blank=True, null=True)
     lessor_name = models.CharField(max_length=255, blank=True, null=True)
+    owner_signature = models.ImageField(upload_to=None, height_field=None, width_field=None, max_length=None)
+    collector_signature = models.ImageField(upload_to=None, height_field=None, width_field=None, max_length=None)
+    collector_designation = models.CharField(max_length=50, blank=True, null=True)
+    picture1 = models.ImageField(upload_to=None, height_field=None, width_field=None, max_length=None)
+    picture2 = models.ImageField(upload_to=None, height_field=None, width_field=None, max_length=None)
+    picture3 = models.ImageField(upload_to=None, height_field=None, width_field=None, max_length=None)
+    picture4 = models.ImageField(upload_to=None, height_field=None, width_field=None, max_length=None)
+    picture5 = models.ImageField(upload_to=None, height_field=None, width_field=None, max_length=None)
+    picture6 = models.ImageField(upload_to=None, height_field=None, width_field=None, max_length=None)
+
 
