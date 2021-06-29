@@ -1,3 +1,6 @@
 from django.contrib import admin
+from .models import Barangay, Business, Category
 
-# Register your models here.
+admin.site.register(Business)
+admin.site.register(Category)
+admin.site.register(Barangay)
