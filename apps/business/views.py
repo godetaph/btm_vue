@@ -61,13 +61,13 @@ class BusinessViewSet(viewsets.ModelViewSet):
 
         barangay1 = self.request.POST.get('barangay')
         category1 = self.request.POST.get('category')
-        barangay_id = Barangay.objects.get(id = barangay1)
-        category_id = Category.objects.get(id = category1)
+        barangay_id = Barangay.objects.get(barangay_name = barangay1)
+        category_id = Category.objects.get(category_name = category1)
         
         if self.request.FILES:
             owner_picture = self.request.FILES.get('owner_picture')
             goods_picture = self.request.FILES.get('goods_picture')
+            serializer.save(owner_picture = owner_picture, goods_services_picture = goods_picture)
 
         serializer.save(created_by=self.request.user, 
-                        owner_picture = owner_picture, barangay = barangay_id, category = category_id,
-                        goods_services_picture = goods_picture)
+                         barangay = barangay_id, category = category_id)
