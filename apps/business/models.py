@@ -1,3 +1,4 @@
+from django.db.models.fields import BLANK_CHOICE_DASH
 from apps.team.models import Team
 from django.contrib.auth.models import User
 from django.db import models
@@ -63,16 +64,17 @@ class Business(models.Model):
         GENDER = ((MALE, 'Male'), (FEMALE, 'Female'))
 
         qr_code = models.IntegerField(blank=True, null=True)
+        qr_code = models.ImageField(upload_to="media/qrcodes", blank=True)
         business_name = models.CharField(max_length=255, blank=True, null=True)
         municipality = models.CharField(max_length=255, blank=True, null=True)
         barangay = models.ForeignKey(Barangay, related_name="business_barangay", on_delete=models.CASCADE, blank=True, null=True)
         purok = models.CharField(max_length=100, blank=True, null=True)
         stall_no = models.CharField(max_length=20, blank=True, null=True)
         gps_all = models.DecimalField(max_digits=20, decimal_places=20, blank=True, null=True)
-        gps_longitude = models.DecimalField(max_digits=20, decimal_places=20, blank=True, null=True)
-        gps_lattitude = models.DecimalField(max_digits=20, decimal_places=20, blank=True, null=True)
-        gps_altitude = models.DecimalField(max_digits=20, decimal_places=20, blank=True, null=True)
-        gps_accuracy = models.DecimalField(max_digits=20, decimal_places=20, blank=True, null=True)
+        gps_longitude = models.DecimalField(max_digits=20, decimal_places=20, blank=True, null=True, default=0.00)
+        gps_lattitude = models.DecimalField(max_digits=20, decimal_places=20, blank=True, null=True, default=0.00)
+        gps_altitude = models.DecimalField(max_digits=20, decimal_places=20, blank=True, null=True, default=0.00)
+        gps_accuracy = models.DecimalField(max_digits=20, decimal_places=20, blank=True, null=True, default=0.00)
         owner_picture = models.ImageField(upload_to='media/owner_pic/', height_field=None, width_field=None, max_length=None, blank=True, null=True) 
         goods_services_picture = models.ImageField(upload_to='media/goods_pic/', height_field=None, width_field=None, max_length=None, blank=True, null=True)
         business_permit_picture = models.ImageField(upload_to='media/permit_pic/', height_field=None, width_field=None, max_length=None, blank=True, null=True)
@@ -94,11 +96,11 @@ class Business(models.Model):
         fsic = models.CharField(max_length=10, blank=True, null=True)
         fsic_number = models.CharField(max_length=100, blank=True, null=True)
         application_status = models.CharField(max_length=50, blank=True, null=True)
-        capitalization_amount = models.DecimalField(max_digits=11, decimal_places=2, blank=True, null=True)
+        capitalization_amount = models.DecimalField(max_digits=11, decimal_places=2, default=0.0, blank=True, null=True)
         gross_sale_amount = models.DecimalField(max_digits=11, decimal_places=2, default=0.0, blank=True, null=True)
-        total_employees = models.IntegerField(blank=True, null=True)
-        total_male = models.IntegerField(blank=True, null=True)
-        total_female = models.IntegerField(blank=True, null=True)
+        total_employees = models.IntegerField(blank=True, null=True, default=0)
+        total_male = models.IntegerField(blank=True, null=True, default=0)
+        total_female = models.IntegerField(blank=True, null=True, default=0)
         location_status = models.CharField(max_length=20, blank=True, null=True)
         location_rental_amount = models.DecimalField(max_digits=7, decimal_places=2, blank=True, null=True)
         lessor_name = models.CharField(max_length=255, blank=True, null=True)
@@ -112,7 +114,6 @@ class Business(models.Model):
         picture5 = models.ImageField(upload_to='media/add_pic/', height_field=None, width_field=None, max_length=None, blank=True, null=True)
         picture6 = models.ImageField(upload_to='media/add_pic/', height_field=None, width_field=None, max_length=None, blank=True, null=True)
         team = models.ForeignKey(Team, related_name='team_business', on_delete=models.CASCADE, blank=True, null=True)
-        category = models.ForeignKey(Category, related_name='business_categories', on_delete=models.CASCADE, blank=True, null=True)
         created_by = models.ForeignKey(User, related_name='created_business', on_delete=models.CASCADE)
         modified_by = models.ForeignKey(User, related_name='modified_business', on_delete=models.CASCADE, blank=True, null=True)
         created_at = models.DateTimeField(auto_now_add=True)
@@ -128,10 +129,10 @@ class Business(models.Model):
 
 class Payment(models.Model):
         payment_mode = models.CharField(max_length=50)
-        payment_date = models.DateTimeField(auto_now=False)
-        paid_to = models.CharField(max_length=255, blank=True, null=True)
+        payment_date = models.DateField(auto_now=False)
+        paid_to = models.CharField(max_length=255)
         or_no = models.CharField(max_length=50)
-        amount_paid = models.DecimalField(max_digits=7, decimal_places=2)
+        amount_paid = models.DecimalField(max_digits=12, decimal_places=2)
         business = models.ForeignKey(Business, related_name="business_payments", on_delete=models.CASCADE)
         created_by = models.ForeignKey(User, related_name="user_payments", on_delete=models.CASCADE)
         created_on = models.DateTimeField(auto_now_add=True)
@@ -141,3 +142,53 @@ class Payment(models.Model):
 
         def __str__(self):
                 return self.payment_mode
+
+class BusinessCategory(models.Model):
+        category=models.ForeignKey(Category, related_name='category_business', on_delete=models.CASCADE)
+        business=models.ForeignKey(Business, related_name='business_category', on_delete=models.CASCADE)
+        comment=models.CharField(max_length=255, blank=True, null=True)
+        is_pushed=models.BooleanField(default=True)
+        created_by=models.ForeignKey(User, related_name='user_category', on_delete=models.CASCADE)
+        created_on=models.DateTimeField(auto_now_add=True)
+
+        class Meta:
+                ordering=["-created_on"]
+
+class Period(models.Model):
+        period_year=models.IntegerField()
+        note=models.CharField(max_length=255)
+        is_active=models.BooleanField(default=False)
+        created_by=models.ForeignKey(User, related_name="user_periods", on_delete=models.CASCADE)
+        created_on=models.DateTimeField(auto_now_add=True)
+
+        class Meta:
+                ordering=["-period_year"]
+        
+        def __str__(self):
+                return self.period_year
+
+class BusinessPeriod(models.Model):
+        period=models.ForeignKey(Period, related_name="periods", on_delete=models.CASCADE)
+        business=models.ForeignKey(Business, related_name="business_periods", on_delete=models.CASCADE)
+        collector=models.ForeignKey(User, related_name="collector_business_periods", on_delete=models.CASCADE)
+        comment=models.CharField(max_length=255, blank=True, null=True)
+        created_by=models.ForeignKey(User, related_name="user_business_periods", on_delete=models.CASCADE)
+        created_on=models.DateTimeField(auto_now_add=True)
+
+        class Meta:
+                ordering=["-created_on"]
+
+class Notification(models.Model):
+        message=models.CharField(max_length=255)
+        is_read=models.BooleanField(default=False)
+        append_type=models.CharField(max_length=20, blank=True, null=True)
+        business=models.ForeignKey(Business, related_name="business_notifications", on_delete=models.CASCADE)
+        created_by=models.ForeignKey(User, related_name="user_notifications", on_delete=models.CASCADE)
+        created_on=models.DateTimeField(auto_now_add=True)
+
+        class Meta:
+                ordering=["-created_on",]
+
+        def FORMAT(self):
+                from django.utils.timesince import timesince
+                return timesince(self.created_on)
