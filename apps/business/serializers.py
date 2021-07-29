@@ -1,9 +1,13 @@
 from django.db import models
 from rest_framework import serializers
 from rest_framework.relations import ManyRelatedField, StringRelatedField
-from .models import Barangay, Business, BusinessCategory, BusinessPeriod, Category, Payment, Notification, Period
+from .models import Barangay, Business, BusinessCategory, BusinessPeriod, Category, Payment, Notification, Period, Qrcode
 
 
+class QrcodeSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Qrcode
+        fields=("id", "qrcode", "qrcode_image")
 
 class BarangaySerializer(serializers.ModelSerializer):
     class Meta:
@@ -11,27 +15,28 @@ class BarangaySerializer(serializers.ModelSerializer):
         fields = ("id","barangay_name", "is_deleted")
 
 class PaymentSerializer(serializers.ModelSerializer):
-    
+    #gross=serializers.DecimalField(max_digits=12, decimal_places=2)
     class Meta:
         model = Payment
         read_only_fields = ("created_by", "created_on")
         fields = ("id","payment_mode", "payment_date", "paid_to", "or_no", "amount_paid", "business")
 
 class BusinessSerializer(serializers.ModelSerializer):
-    barangay = BarangaySerializer(many=False)
+    barangay = serializers.PrimaryKeyRelatedField(queryset=Barangay.objects.all())
+    bar_name = serializers.CharField(source='barangay.barangay_name', read_only=True)
     #category = CategorySerializer(many=True)
     class Meta:
         model = Business
         read_only_fields = ("created_by", "created_at", "modified_by", "modified_at", "team")
         fields = (
-            "id","qr_code", "business_name", "municipality", "barangay", "purok", "stall_no", "gps_all", "gps_longitude", "gps_lattitude",
-            "gps_altitude", "gps_accuracy", "owner_picture", "goods_services_picture", "business_permit_picture", 
-            "others1_picture", "others2_picture", "business_owner_name", "business_owner_number", "business_representative",
+            "id","qr_code", "business_name", "barangay", "bar_name", "purok", "stall_no", "gps_longitude", "gps_latitude",
+            "gps_altitud", "gps_accuracy", "owner_picture", "goods_services_picture", "business_permit_picture", 
+            "business_owner_name", "business_owner_number", "business_representative",
             "owner_gender", "ownership_type", "is_business_permit", "business_permit_status", "is_notice",
             "notice_remarks", "business_status", "payment_type", "inactive_remarks", "inactive_reason", "fsic", "fsic_number",
             "capitalization_amount", "gross_sale_amount", "total_employees", "application_status",
             "total_male", "total_female", "location_status", "location_rental_amount", "lessor_name", "owner_signature",
-            "collector_signature", "collector_designation", "picture1", "picture2", "picture3", "picture4", "picture5", "picture6",
+            "collector_signature", "collector_designation", "picture1", "picture2", "picture3",
         )
 
 class BusinessCategorySerializer(serializers.ModelSerializer):
@@ -65,7 +70,14 @@ class PeriodSerializer(serializers.ModelSerializer):
         fields=("id", "period_year", "note", "is_active")
 
 class BusinessPeriodSerializer(serializers.ModelSerializer):
+    business=serializers.PrimaryKeyRelatedField(queryset=Business.objects.all())
+    business_name=serializers.CharField(source='business.business_name', read_only=True)
+    business_owner=serializers.CharField(source='business.business_owner_name', read_only=True)
+    barangay=serializers.CharField(source='business.barangay.barangay_name', read_only=True)
+    purok=serializers.CharField(source='business.purok', read_only=True)
+    permit=serializers.CharField(source='business.is_business_permit', read_only=True)
+    
     class Meta:
         model=BusinessPeriod
         read_only_fields=("created_by", "created_on", "collector")
-        fields=("id", "period", "business", "comment")
+        fields=("id", "period", "business", "comment", "business_name", "business_owner", "barangay", "purok", "permit")

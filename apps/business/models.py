@@ -2,6 +2,10 @@ from django.db.models.fields import BLANK_CHOICE_DASH
 from apps.team.models import Team
 from django.contrib.auth.models import User
 from django.db import models
+import qrcode
+from io import BytesIO
+from django.core.files import File
+from PIL import Image, ImageDraw
 
 
 class Category(models.Model):
@@ -23,6 +27,22 @@ class Barangay(models.Model):
 
         def __str__(self):
                 return self.barangay_name
+
+class Qrcode(models.Model):
+        qrcode = models.CharField(max_length=50)
+        qrcode_image = models.ImageField(upload_to="media/qrcodes", blank=True)
+
+        def save(self, *args, **kwargs):
+                qrcode_img = qrcode.make(self.qrcode)
+                canvass=Image.new('RGB', (370, 370), 'white')
+                draw=ImageDraw.Draw(canvass)
+                canvass.paste(qrcode_img)
+                fname=f"{self.qrcode}'+'.png"
+                buffer=BytesIO()
+                canvass.save(buffer, 'PNG')
+                self.qrcode_image.save(fname, File(buffer), save=False)
+                canvass.close()
+                super().save(*args, **kwargs)
 
 class Business(models.Model):
         SINGLE = 'SINGLE PROPRIETOR'
@@ -63,23 +83,18 @@ class Business(models.Model):
         FEMALE = 'Female'
         GENDER = ((MALE, 'Male'), (FEMALE, 'Female'))
 
-        qr_code = models.IntegerField(blank=True, null=True)
-        qr_code = models.ImageField(upload_to="media/qrcodes", blank=True)
+        qr_code = models.CharField(max_length=50, blank=True, null=True)
         business_name = models.CharField(max_length=255, blank=True, null=True)
-        municipality = models.CharField(max_length=255, blank=True, null=True)
         barangay = models.ForeignKey(Barangay, related_name="business_barangay", on_delete=models.CASCADE, blank=True, null=True)
         purok = models.CharField(max_length=100, blank=True, null=True)
         stall_no = models.CharField(max_length=20, blank=True, null=True)
-        gps_all = models.DecimalField(max_digits=20, decimal_places=20, blank=True, null=True)
-        gps_longitude = models.DecimalField(max_digits=20, decimal_places=20, blank=True, null=True, default=0.00)
-        gps_lattitude = models.DecimalField(max_digits=20, decimal_places=20, blank=True, null=True, default=0.00)
-        gps_altitude = models.DecimalField(max_digits=20, decimal_places=20, blank=True, null=True, default=0.00)
-        gps_accuracy = models.DecimalField(max_digits=20, decimal_places=20, blank=True, null=True, default=0.00)
+        gps_longitude = models.DecimalField(max_digits=16, decimal_places=13, blank=True, null=True, default=0)
+        gps_latitude = models.DecimalField(max_digits=16, decimal_places=13, blank=True, null=True, default=0)
+        gps_altitud = models.DecimalField(max_digits=16, decimal_places=13, blank=True, null=True, default=0)
+        gps_accuracy = models.DecimalField(max_digits=16, decimal_places=13, blank=True, null=True, default=0)
         owner_picture = models.ImageField(upload_to='media/owner_pic/', height_field=None, width_field=None, max_length=None, blank=True, null=True) 
         goods_services_picture = models.ImageField(upload_to='media/goods_pic/', height_field=None, width_field=None, max_length=None, blank=True, null=True)
         business_permit_picture = models.ImageField(upload_to='media/permit_pic/', height_field=None, width_field=None, max_length=None, blank=True, null=True)
-        others1_picture = models.ImageField(upload_to='media/others_pic/', height_field=None, width_field=None, max_length=None, blank=True, null=True)
-        others2_picture = models.ImageField(upload_to='media/others_pic/', height_field=None, width_field=None, max_length=None, blank=True, null=True)
         business_owner_name = models.CharField(max_length=255, blank=True, null=True)
         business_owner_number = models.CharField(max_length=100, blank=True, null=True)
         business_representative = models.CharField(max_length=255, blank=True, null=True)
@@ -90,7 +105,7 @@ class Business(models.Model):
         is_notice = models.CharField(max_length=50, blank=True, null=True)
         notice_remarks = models.CharField(max_length=255, blank=True, null=True)
         business_status = models.CharField(max_length=100, blank=True, null=True) 
-        payment_type = models.CharField(max_length=50, blank=True, null=True)
+        payment_type = models.CharField(max_length=20, blank=True, null=True)
         inactive_remarks = models.CharField(max_length=255, blank=True, null=True)
         inactive_reason = models.CharField(max_length=50, blank=True, null=True)
         fsic = models.CharField(max_length=10, blank=True, null=True)
@@ -110,15 +125,13 @@ class Business(models.Model):
         picture1 = models.ImageField(upload_to='media/add_pic/', height_field=None, width_field=None, max_length=None, blank=True, null=True)
         picture2 = models.ImageField(upload_to='media/add_pic/', height_field=None, width_field=None, max_length=None, blank=True, null=True)
         picture3 = models.ImageField(upload_to='media/add_pic/', height_field=None, width_field=None, max_length=None, blank=True, null=True)
-        picture4 = models.ImageField(upload_to='media/add_pic/', height_field=None, width_field=None, max_length=None, blank=True, null=True)
-        picture5 = models.ImageField(upload_to='media/add_pic/', height_field=None, width_field=None, max_length=None, blank=True, null=True)
-        picture6 = models.ImageField(upload_to='media/add_pic/', height_field=None, width_field=None, max_length=None, blank=True, null=True)
         team = models.ForeignKey(Team, related_name='team_business', on_delete=models.CASCADE, blank=True, null=True)
         created_by = models.ForeignKey(User, related_name='created_business', on_delete=models.CASCADE)
         modified_by = models.ForeignKey(User, related_name='modified_business', on_delete=models.CASCADE, blank=True, null=True)
         created_at = models.DateTimeField(auto_now_add=True)
         modified_at = models.DateTimeField(auto_now_add=True)
         is_deleted = models.BooleanField(default=False)
+        submitted_from = models.CharField(max_length=10, blank=True, null=True)
 
         class Meta:
                 ordering = ("business_name",)
@@ -140,8 +153,8 @@ class Payment(models.Model):
         class Meta:
                 ordering = ["-payment_date",]
 
-        def __str__(self):
-                return self.payment_mode
+        # def __str__(self):
+        #         return self.payment_mode
 
 class BusinessCategory(models.Model):
         category=models.ForeignKey(Category, related_name='category_business', on_delete=models.CASCADE)
