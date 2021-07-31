@@ -112,7 +112,7 @@ class BusinessViewSet(viewsets.ModelViewSet):
     filter_backends=(filters.SearchFilter,)
     search_fields=('business_name', 'business_owner_name', 'business_representative', '^purok', '^lessor_name', '=is_business_permit',
                     '^barangay__barangay_name', '=ownership_type', '=business_permit_status', '=business_status', '=payment_type',
-                    '=application_status', '=location_status', 'business_owner_number', 'capitalization_amount', 'gross_sale_amount')
+                    '=application_status', '=location_status', '^business_owner_number', 'capitalization_amount', 'gross_sale_amount')
 
     def get_queryset(self):
         bar=self.request.query_params.get('bar')
