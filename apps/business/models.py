@@ -7,7 +7,7 @@ from io import BytesIO
 from django.core.files import File
 from PIL import Image, ImageDraw
 
-
+#category_model
 class Category(models.Model):
         category_name = models.CharField(max_length=255)
         is_deleted = models.BooleanField(default=False)
@@ -17,7 +17,8 @@ class Category(models.Model):
 
         def __str__(self):
                 return self.category_name
-        
+
+#barangay_model
 class Barangay(models.Model):
         barangay_name = models.CharField(max_length=150, unique=True)
         is_deleted = models.BooleanField(default=False)
@@ -28,9 +29,17 @@ class Barangay(models.Model):
         def __str__(self):
                 return self.barangay_name
 
+#qrcode_model
 class Qrcode(models.Model):
         qrcode = models.CharField(max_length=50)
         qrcode_image = models.ImageField(upload_to="media/qrcodes", blank=True)
+
+        class Meta:
+                ordering = ['-id']
+
+        def __str__(self):
+                return f'{self.id}'
+
 
         def save(self, *args, **kwargs):
                 qrcode_img = qrcode.make(self.qrcode)
@@ -44,6 +53,7 @@ class Qrcode(models.Model):
                 canvass.close()
                 super().save(*args, **kwargs)
 
+#business_model
 class Business(models.Model):
         SINGLE = 'SINGLE PROPRIETOR'
         PARTNER = 'PARTNERSHIP'
@@ -139,7 +149,7 @@ class Business(models.Model):
         def __str__(self):
                 return self.business_name
 
-
+#payment
 class Payment(models.Model):
         payment_mode = models.CharField(max_length=50)
         payment_date = models.DateField(auto_now=False)
@@ -156,6 +166,7 @@ class Payment(models.Model):
         # def __str__(self):
         #         return self.payment_mode
 
+#business_category
 class BusinessCategory(models.Model):
         category=models.ForeignKey(Category, related_name='category_business', on_delete=models.CASCADE)
         business=models.ForeignKey(Business, related_name='business_category', on_delete=models.CASCADE)
@@ -167,6 +178,7 @@ class BusinessCategory(models.Model):
         class Meta:
                 ordering=["-created_on"]
 
+#period
 class Period(models.Model):
         period_year=models.IntegerField()
         note=models.CharField(max_length=255)
@@ -180,6 +192,7 @@ class Period(models.Model):
         def __str__(self):
                 return self.period_year
 
+#business_period
 class BusinessPeriod(models.Model):
         period=models.ForeignKey(Period, related_name="periods", on_delete=models.CASCADE)
         business=models.ForeignKey(Business, related_name="business_periods", on_delete=models.CASCADE)
@@ -191,6 +204,7 @@ class BusinessPeriod(models.Model):
         class Meta:
                 ordering=["-created_on"]
 
+#notifications
 class Notification(models.Model):
         message=models.CharField(max_length=255)
         is_read=models.BooleanField(default=False)

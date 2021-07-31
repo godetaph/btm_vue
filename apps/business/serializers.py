@@ -3,17 +3,18 @@ from rest_framework import serializers
 from rest_framework.relations import ManyRelatedField, StringRelatedField
 from .models import Barangay, Business, BusinessCategory, BusinessPeriod, Category, Payment, Notification, Period, Qrcode
 
-
+#qr code
 class QrcodeSerializer(serializers.ModelSerializer):
     class Meta:
         model = Qrcode
         fields=("id", "qrcode", "qrcode_image")
-
+#barangay
 class BarangaySerializer(serializers.ModelSerializer):
     class Meta:
         model = Barangay
         fields = ("id","barangay_name", "is_deleted")
 
+#payment
 class PaymentSerializer(serializers.ModelSerializer):
     #gross=serializers.DecimalField(max_digits=12, decimal_places=2)
     class Meta:
@@ -21,6 +22,7 @@ class PaymentSerializer(serializers.ModelSerializer):
         read_only_fields = ("created_by", "created_on")
         fields = ("id","payment_mode", "payment_date", "paid_to", "or_no", "amount_paid", "business")
 
+#business
 class BusinessSerializer(serializers.ModelSerializer):
     barangay = serializers.PrimaryKeyRelatedField(queryset=Barangay.objects.all())
     bar_name = serializers.CharField(source='barangay.barangay_name', read_only=True)
@@ -39,6 +41,7 @@ class BusinessSerializer(serializers.ModelSerializer):
             "collector_signature", "collector_designation", "picture1", "picture2", "picture3",
         )
 
+#busniess_category
 class BusinessCategorySerializer(serializers.ModelSerializer):
     category=serializers.PrimaryKeyRelatedField(queryset=Category.objects.all())
     #cat_name=serializers.StringRelatedField(source='category_business', read_only=True)
@@ -48,6 +51,7 @@ class BusinessCategorySerializer(serializers.ModelSerializer):
         read_only_fields=("created_by", "created_on")
         fields=("id", "category", "business", "comment", "is_pushed", "cat_name")
 
+#category
 class CategorySerializer(serializers.ModelSerializer):
     #bus_category=serializers.PrimaryKeyRelatedField(many=True, read_only=True)
     #bus_cat= BusinessCategorySerializer(source='category_business', many=True)
@@ -55,6 +59,7 @@ class CategorySerializer(serializers.ModelSerializer):
         model = Category
         fields = ("id","category_name", "is_deleted")
 
+#notification
 class NotificationSerializer(serializers.ModelSerializer):
     business_name=serializers.CharField(source='business.business_name', read_only=True)
     created=serializers.CharField(source='FORMAT')
@@ -63,12 +68,14 @@ class NotificationSerializer(serializers.ModelSerializer):
         read_only_fields=("created_by",)
         fields=("id", "message", "is_read", "business", "append_type","created_on", "business_name", "created")
 
+#period
 class PeriodSerializer(serializers.ModelSerializer):
     class Meta:
         model=Period
         read_only_fields=("created_by", "created_on",)
         fields=("id", "period_year", "note", "is_active")
 
+#business_period
 class BusinessPeriodSerializer(serializers.ModelSerializer):
     business=serializers.PrimaryKeyRelatedField(queryset=Business.objects.all())
     business_name=serializers.CharField(source='business.business_name', read_only=True)

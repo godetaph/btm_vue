@@ -66,7 +66,8 @@ class QrcodeViewSet(viewsets.ModelViewSet):
     # def perform_create(self, serializer):
     #     qrcode=generate_qr_code()
     #     create_qrcode(qrcode)
-    
+
+#category_viewset
 class CategoryViewSet(viewsets.ModelViewSet):
     pagination_class=CategoryPagination
     serializer_class = CategorySerializer
@@ -77,6 +78,7 @@ class CategoryViewSet(viewsets.ModelViewSet):
         # queryset=
         return self.queryset.filter(is_deleted=False)
 
+#barangay_viewset
 class BarangayViewSet(viewsets.ModelViewSet):
     pagination_class=BarangayPagination
     serializer_class = BarangaySerializer
@@ -85,6 +87,7 @@ class BarangayViewSet(viewsets.ModelViewSet):
     def get_queryset(self):
         return self.queryset.filter(is_deleted=False)
 
+#payment_viewset
 class PaymentViewSet(viewsets.ModelViewSet):
     serializer_class = PaymentSerializer
     queryset = Payment.objects.all()
@@ -101,6 +104,7 @@ class PaymentViewSet(viewsets.ModelViewSet):
     def perform_create(self, serializer):
         serializer.save(created_by=self.request.user)
 
+#business_viewset
 class BusinessViewSet(viewsets.ModelViewSet):
     pagination_class=BusinessPagination
     serializer_class = BusinessSerializer
@@ -191,6 +195,7 @@ class BusinessViewSet(viewsets.ModelViewSet):
         serializer.save(created_by=self.request.user,
                          barangay = barangay_id)
 
+#business_category_viewset
 class BusinessCategoryViewSet(viewsets.ModelViewSet):
     serializer_class=BusinessCategorySerializer
     queryset=BusinessCategory.objects.all()
@@ -216,6 +221,7 @@ class BusinessCategoryViewSet(viewsets.ModelViewSet):
         if serializer.data['is_pushed']:
             create_notification(self.request, message=serializer.data['comment'], is_read=False, business=serializer.data['business'], append_type='Category')
 
+#business_notifications
 class NotificationViewSet(viewsets.ModelViewSet):
     serializer_class=NotificationSerializer
     queryset=Notification.objects.all()
@@ -229,6 +235,7 @@ class NotificationViewSet(viewsets.ModelViewSet):
         
         return queryset
 
+#period_viewset
 class PeriodViewSet(viewsets. ModelViewSet):
     serializer_class=PeriodSerializer
     queryset=Period.objects.all()
@@ -236,6 +243,7 @@ class PeriodViewSet(viewsets. ModelViewSet):
     def perform_create(self, serializer):
         serializer.save(created_by=self.request.user)
 
+#business_period_viewset
 class BusinessPeriodViewSet(viewsets.ModelViewSet):
     serializer_class=BusinessPeriodSerializer
     queryset=BusinessPeriod.objects.all()

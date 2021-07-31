@@ -6,6 +6,7 @@ from rest_framework.routers import DefaultRouter
 from django.urls import path, include
 from .views import BarangayViewSet, BusinessCategoryViewSet, BusinessPeriodViewSet, CategoryViewSet, BusinessViewSet, NotificationViewSet, PaymentViewSet, PeriodViewSet, QrcodeViewSet
 
+#default router
 router = DefaultRouter()
 router.register("businesses", BusinessViewSet, basename="businesses")
 router.register("categories", CategoryViewSet, basename="categories")
