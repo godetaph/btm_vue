@@ -38,7 +38,7 @@ class BusinessSerializer(serializers.ModelSerializer):
             "notice_remarks", "business_status", "payment_type", "inactive_remarks", "inactive_reason", "fsic", "fsic_number",
             "capitalization_amount", "gross_sale_amount", "total_employees", "application_status",
             "total_male", "total_female", "location_status", "location_rental_amount", "lessor_name", "owner_signature",
-            "collector_signature", "collector_designation", "picture1", "picture2", "picture3",
+            "collector_signature", "collector_designation", "picture1", "picture2", "picture3", "submitted_from"
         )
 
 #busniess_category

@@ -178,7 +178,7 @@ class BusinessCategory(models.Model):
         class Meta:
                 ordering=["-created_on"]
 
-#period
+#period model
 class Period(models.Model):
         period_year=models.IntegerField()
         note=models.CharField(max_length=255)
