@@ -128,7 +128,7 @@ class BusinessViewSet(viewsets.ModelViewSet):
         return queryset
 
     def perform_create(self, serializer):
-        team = self.request.user.teams.first()
+        #team = self.request.user.teams.first()
         
         barangay1 = self.request.POST.get('barangay')
         barangay_id = Barangay.objects.get(id = barangay1)
@@ -148,8 +148,7 @@ class BusinessViewSet(viewsets.ModelViewSet):
 
 
         serializer.save(created_by=self.request.user, 
-                        owner_picture = owner_picture, barangay = barangay_id,
-                        team = team)
+                        owner_picture = owner_picture, barangay = barangay_id)
 
     def perform_update(self, serializer):
         #obj = self.get_object()
