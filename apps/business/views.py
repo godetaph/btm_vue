@@ -147,7 +147,8 @@ class BusinessViewSet(viewsets.ModelViewSet):
                         owner_signature = owner_signature, picture1 = picture1, picture2=picture2, picture3=picture3)
 
 
-        serializer.save(created_by=self.request.user, barangay = barangay_id)
+        #serializer.save(created_by=self.request.user, barangay = barangay_id)
+        serializer.save(barangay = barangay_id)
 
     def perform_update(self, serializer):
         #obj = self.get_object()

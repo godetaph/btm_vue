@@ -136,7 +136,7 @@ class Business(models.Model):
         picture2 = models.ImageField(upload_to='media/add_pic/', height_field=None, width_field=None, max_length=None, blank=True, null=True)
         picture3 = models.ImageField(upload_to='media/add_pic/', height_field=None, width_field=None, max_length=None, blank=True, null=True)
         team = models.ForeignKey(Team, related_name='team_business', on_delete=models.CASCADE, blank=True, null=True)
-        created_by = models.ForeignKey(User, related_name='created_business', on_delete=models.CASCADE)
+        created_by = models.ForeignKey(User, related_name='created_business', on_delete=models.CASCADE, blank=True, null=True)
         modified_by = models.ForeignKey(User, related_name='modified_business', on_delete=models.CASCADE, blank=True, null=True)
         created_at = models.DateTimeField(auto_now_add=True)
         modified_at = models.DateTimeField(auto_now_add=True)
