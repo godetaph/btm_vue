@@ -187,12 +187,8 @@ class BusinessViewSet(viewsets.ModelViewSet):
             picture3=self.request.FILES.get('picture3')
             if picture3 is not None:
                 serializer.save(picture3=picture3)
-            # serializer.save(owner_picture = owner_picture, goods_services_picture = goods_picture)
-            # serializer.save()
 
-        print("after")
-        serializer.save(created_by=self.request.user,
-                         barangay = barangay_id)
+        serializer.save(barangay = barangay_id)
 
 #business_category_viewset
 class BusinessCategoryViewSet(viewsets.ModelViewSet):
