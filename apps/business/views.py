@@ -23,7 +23,7 @@ def generate_qr_code():
 #method for auto-insert in the database
 def create_notification(request, message, is_read, business, append_type):
     biz=get_object_or_404(Business, pk=business)
-    notification=Notification.objects.create(message=message, is_read=is_read, business=biz, created_by=request.user, append_type=append_type)
+    notification=Notification.objects.create(message=message, is_read=is_read, business=biz, append_type=append_type)
 
 def create_qrcode(qrcode):
     qrcode=Qrcode.objects.create(qrcode=qrcode)

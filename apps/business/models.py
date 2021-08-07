@@ -211,7 +211,7 @@ class Notification(models.Model):
         is_read=models.BooleanField(default=False)
         append_type=models.CharField(max_length=20, blank=True, null=True)
         business=models.ForeignKey(Business, related_name="business_notifications", on_delete=models.CASCADE)
-        created_by=models.ForeignKey(User, related_name="user_notifications", on_delete=models.CASCADE)
+        created_by=models.ForeignKey(User, related_name="user_notifications", on_delete=models.CASCADE, blank=True, null=True)
         created_on=models.DateTimeField(auto_now_add=True)
 
         class Meta:
