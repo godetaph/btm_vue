@@ -48,7 +48,7 @@ class BusinessCategorySerializer(serializers.ModelSerializer):
     cat_name=serializers.CharField(source='category.category_name', read_only=True)
     class Meta:
         model=BusinessCategory
-        read_only_fields=("created_on")
+        read_only_fields=("created_on",)
         fields=("id", "category", "business", "comment", "is_pushed", "cat_name", "created_by",)
 
 #category
