@@ -203,7 +203,7 @@ class BusinessCategoryViewSet(viewsets.ModelViewSet):
         return queryset
     
     def perform_create(self, serializer):
-        serializer.save(created_by=self.request.user)
+        serializer.save()
         if serializer.data['is_pushed']:
             create_notification(self.request, message=serializer.data['comment'], is_read=False, business=serializer.data['business'], append_type='Category')
         
@@ -212,7 +212,7 @@ class BusinessCategoryViewSet(viewsets.ModelViewSet):
             
     
     def perform_update(self, serializer):
-        serializer.save(created_by=self.request.user)
+        serializer.save()
         if serializer.data['is_pushed']:
             create_notification(self.request, message=serializer.data['comment'], is_read=False, business=serializer.data['business'], append_type='Category')
 

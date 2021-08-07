@@ -94,6 +94,7 @@ class Business(models.Model):
         GENDER = ((MALE, 'Male'), (FEMALE, 'Female'))
 
         qr_code = models.CharField(max_length=50, blank=True, null=True)
+        business_code = models.CharField(max_length=20, blank=True, null=True)
         business_name = models.CharField(max_length=255, blank=True, null=True)
         barangay = models.ForeignKey(Barangay, related_name="business_barangay", on_delete=models.CASCADE, blank=True, null=True)
         purok = models.CharField(max_length=100, blank=True, null=True)
@@ -172,7 +173,7 @@ class BusinessCategory(models.Model):
         business=models.ForeignKey(Business, related_name='business_category', on_delete=models.CASCADE)
         comment=models.CharField(max_length=255, blank=True, null=True)
         is_pushed=models.BooleanField(default=True)
-        created_by=models.ForeignKey(User, related_name='user_category', on_delete=models.CASCADE)
+        created_by=models.ForeignKey(User, related_name='user_category', on_delete=models.CASCADE, blank=True, null=True)
         created_on=models.DateTimeField(auto_now_add=True)
 
         class Meta:
