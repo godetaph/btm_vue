@@ -1,0 +1,32 @@
+{
+  "name": "Business_Tax_Mapping",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "serve": "vue-cli-service serve",
+    "build": "vue-cli-service build"
+  },
+  "dependencies": {
+    "@fawmi/vue-google-maps": "^0.8.7",
+    "axios": "^0.21.1",
+    "bulma": "^0.9.2",
+    "bulma-toast": "^2.3.1",
+    "chart.js": "^2.9.4",
+    "core-js": "^3.6.5",
+    "moment": "^2.29.1",
+    "vue": "^3.0.0",
+    "vue-router": "^4.0.0-0",
+    "vue2-google-maps": "^0.10.7",
+    "vuex": "^4.0.0-0",
+    "xlsx": "^0.17.0"
+  },
+  "devDependencies": {
+    "@vue/cli-plugin-babel": "~4.5.0",
+    "@vue/cli-plugin-router": "~4.5.0",
+    "@vue/cli-plugin-vuex": "~4.5.0",
+    "@vue/cli-service": "~4.5.0",
+    "@vue/compiler-sfc": "^3.0.0",
+    "sass": "^1.26.5",
+    "sass-loader": "^8.0.2"
+  }
+}
