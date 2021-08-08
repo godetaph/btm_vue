@@ -128,7 +128,6 @@ class BusinessViewSet(viewsets.ModelViewSet):
             business_name_code="Business ", obj_qrcode
             business=Business.objects.create(qr_code=qr_code, qrcode=obj_qrcode, business_name=business_name_code)
             queryset=Business.objects.filter(qrcode=obj_qrcode)
-            print(queryset, ' - business created')
 
         if bar is not None:
             queryset=queryset.filter(barangay=bar)
