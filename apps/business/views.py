@@ -27,7 +27,7 @@ def create_notification(request, message, is_read, business, append_type):
 
 def create_qrcode(qrcode):
     qrcode=Qrcode.objects.create(qrcode=qrcode)
-
+    return qrcode
 #paginations
 class BusinessPagination(PageNumberPagination):
     page_size_query_param='size'
@@ -117,8 +117,19 @@ class BusinessViewSet(viewsets.ModelViewSet):
     def get_queryset(self):
         bar=self.request.query_params.get('bar')
         permit=self.request.query_params.get('permit')
+        qrcode=self.request.query_params.get('qrcode')
         queryset=Business.objects.all()
         print(bar)
+        if qrcode is not None:
+            print (qrcode, ' - qrcode params')
+            qr_code=generate_qr_code()
+            obj_qrcode=create_qrcode(qr_code)
+            print(obj_qrcode, ' - qrcode')
+            business_name_code="Business ", obj_qrcode
+            business=Business.objects.create(qr_code=qr_code, qrcode=obj_qrcode, business_name=business_name_code)
+            queryset=Business.objects.filter(qrcode=obj_qrcode)
+            print(queryset, ' - business created')
+
         if bar is not None:
             queryset=queryset.filter(barangay=bar)
         
@@ -130,24 +141,25 @@ class BusinessViewSet(viewsets.ModelViewSet):
     def perform_create(self, serializer):
         #team = self.request.user.teams.first()
         
-        barangay1 = self.request.POST.get('barangay')
-        barangay_id = Barangay.objects.get(id = barangay1)
-        if self.request.FILES:
-            owner_picture = self.request.FILES.get('owner_picture')
-            goods_picture = self.request.FILES.get('goods_picture')
-            business_permit=self.request.FILES.get('business_permit')
-            owner_signature=self.request.FILES.get('owner_signature')
-            picture1=self.request.FILES.get('picture1')
-            picture2=self.request.FILES.get('picture2')
-            picture3=self.request.FILES.get('picture3')
+        # barangay1 = self.request.POST.get('barangay')
+        # barangay_id = Barangay.objects.get(id = barangay1)
+        # if self.request.FILES:
+        #     owner_picture = self.request.FILES.get('owner_picture')
+        #     goods_picture = self.request.FILES.get('goods_picture')
+        #     business_permit=self.request.FILES.get('business_permit')
+        #     owner_signature=self.request.FILES.get('owner_signature')
+        #     picture1=self.request.FILES.get('picture1')
+        #     picture2=self.request.FILES.get('picture2')
+        #     picture3=self.request.FILES.get('picture3')
 
-            serializer.save(created_by=self.request.user,
-                        owner_picture = owner_picture, goods_services_picture = goods_picture, 
-                        business_permit_picture = business_permit,
-                        owner_signature = owner_signature, picture1 = picture1, picture2=picture2, picture3=picture3)
+        #     serializer.save(created_by=self.request.user,
+        #                 owner_picture = owner_picture, goods_services_picture = goods_picture, 
+        #                 business_permit_picture = business_permit,
+        #                 owner_signature = owner_signature, picture1 = picture1, picture2=picture2, picture3=picture3)
 
 
         #serializer.save(created_by=self.request.user, barangay = barangay_id)
+
         serializer.save(barangay = barangay_id)
 
     def perform_update(self, serializer):

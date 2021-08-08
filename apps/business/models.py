@@ -96,6 +96,7 @@ class Business(models.Model):
         qr_code = models.CharField(max_length=50, blank=True, null=True)
         business_code = models.CharField(max_length=20, blank=True, null=True)
         business_name = models.CharField(max_length=255, blank=True, null=True)
+        qrcode = models.OneToOneField(Qrcode, related_name="business_qrcode", on_delete=models.CASCADE, blank=True, null=True)
         barangay = models.ForeignKey(Barangay, related_name="business_barangay", on_delete=models.CASCADE, blank=True, null=True)
         purok = models.CharField(max_length=100, blank=True, null=True)
         stall_no = models.CharField(max_length=20, blank=True, null=True)
