@@ -6,7 +6,7 @@
       </section>
 
       <footer class="footer">
-        <p class="has-text-centered">delta-ph.com (c) 2021</p>
+        <p class="has-text-centered">Midsayap - Business Tax Mapping System v1.0 | powered by: delta-ph.com (c) 2021</p>
       </footer>
     </div>
 </template>
