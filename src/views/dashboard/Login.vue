@@ -3,15 +3,13 @@
         <div class="columns">
             <div class="column is-4 is-offset-4">
                 <div class="box">
-
-                
                     <h1 class="title is-5">Login</h1>
 
                     <form @submit.prevent="submitForm">
                         <div class="field">
                             <label for="">Username</label>
                             <div class="control">
-                                <input type="email" class="input" name="username" v-model="username">
+                                <input type="input" class="input" name="username" v-model="username">
                             </div>
                         </div>
                         <div class="field">
