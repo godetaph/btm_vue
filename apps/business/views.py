@@ -156,18 +156,16 @@ class BusinessViewSet(viewsets.ModelViewSet):
         #                 business_permit_picture = business_permit,
         #                 owner_signature = owner_signature, picture1 = picture1, picture2=picture2, picture3=picture3)
 
-
         #serializer.save(created_by=self.request.user, barangay = barangay_id)
-
-        serializer.save(barangay = barangay_id)
+        serializer.save()
 
     def perform_update(self, serializer):
         #obj = self.get_object()
 
-        barangay1 = self.request.POST.get('barangay')
-        barangay_id = Barangay.objects.get(id= barangay1)
-        print("before")
-        print(serializer.validated_data['gps_latitude'])
+        # barangay1 = self.request.POST.get('barangay')
+        # barangay_id = Barangay.objects.get(id= barangay1)
+        # print("before")
+        # print(serializer.validated_data['gps_latitude'])
         if self.request.FILES:
             print("inside")
             owner_picture = self.request.FILES.get('owner_picture')
@@ -199,7 +197,7 @@ class BusinessViewSet(viewsets.ModelViewSet):
             if picture3 is not None:
                 serializer.save(picture3=picture3)
 
-        serializer.save(barangay = barangay_id)
+        serializer.save()
 
 #business_category_viewset
 class BusinessCategoryViewSet(viewsets.ModelViewSet):

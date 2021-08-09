@@ -31,7 +31,7 @@ class BusinessSerializer(serializers.ModelSerializer):
     #category = CategorySerializer(many=True)
     class Meta:
         model = Business
-        read_only_fields = ("created_at", "modified_by", "modified_at", "team")
+        read_only_fields = ("created_at", "modified_at", "team")
         fields = (
             "id","qr_code", "qrcode", "business_name", "barangay", "bar_name", "purok", "stall_no", "gps_longitude", "gps_latitude",
             "gps_altitud", "gps_accuracy", "owner_picture", "goods_services_picture", "business_permit_picture", 
@@ -40,7 +40,7 @@ class BusinessSerializer(serializers.ModelSerializer):
             "notice_remarks", "business_status", "payment_type", "inactive_remarks", "inactive_reason", "fsic", "fsic_number",
             "capitalization_amount", "gross_sale_amount", "total_employees", "application_status",
             "total_male", "total_female", "location_status", "location_rental_amount", "lessor_name", "owner_signature",
-            "collector_signature", "collector_designation", "picture1", "picture2", "picture3", "submitted_from", "created_by", "qrcode_url", 
+            "collector_signature", "collector_designation", "picture1", "picture2", "picture3", "submitted_from", "created_by", "qrcode_url", "modified_by",
         )
 
 #busniess_category
