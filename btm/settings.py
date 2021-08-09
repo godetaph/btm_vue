@@ -31,8 +31,10 @@ DEBUG = True
 ALLOWED_HOSTS = ['127.0.0.1', 'localhost', 'btm-101.herokuapp.com']
 
 CORS_ALLOWED_ORIGINS = [
-    "http://localhost:8080",
-    "http://127.0.0.1:8000"
+    "https://midsayap-btm.netlify.app",
+    #"http://localhost:8080",
+    "https://btm-101.herokuapp.com"
+    #"http://127.0.0.1:8000"
 ]
 
 REST_FRAMEWORK = {
