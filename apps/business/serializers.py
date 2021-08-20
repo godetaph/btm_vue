@@ -14,13 +14,20 @@ class BarangaySerializer(serializers.ModelSerializer):
         model = Barangay
         fields = ("id","barangay_name", "is_deleted")
 
+#payment_list_serializer
+class BulkPaymentSerializer(serializers.ListSerializer):
+    def create(self, validated_data):
+        status_data = [Payment(**item) for item in validated_data]
+        return Payment.objects.bulk_create(status_data)
+
 #payment
 class PaymentSerializer(serializers.ModelSerializer):
     #gross=serializers.DecimalField(max_digits=12, decimal_places=2)
     class Meta:
         model = Payment
-        read_only_fields = ("created_by", "created_on")
-        fields = ("id","payment_mode", "payment_date", "paid_to", "or_no", "amount_paid", "business")
+        read_only_fields = ("created_on",)
+        fields = ("id","code","payment_mode", "payment_date", "paid_to", "or_no", "amount_paid", "business", "created_by",)
+        #list_serializer_class = BulkPaymentSerializer
 
 #business
 class BusinessSerializer(serializers.ModelSerializer):
@@ -33,11 +40,11 @@ class BusinessSerializer(serializers.ModelSerializer):
         model = Business
         read_only_fields = ("created_at", "modified_at", "team")
         fields = (
-            "id","qr_code", "qrcode", "business_name", "barangay", "bar_name", "purok", "stall_no", "gps_longitude", "gps_latitude",
+            "id","qr_code", "qrcode", "business_code","business_name", "barangay", "bar_name", "purok", "stall_no", "gps_longitude", "gps_latitude",
             "gps_altitud", "gps_accuracy", "owner_picture", "goods_services_picture", "business_permit_picture", 
             "business_owner_name", "business_owner_number", "business_representative",
             "owner_gender", "ownership_type", "is_business_permit", "business_permit_status", "is_notice",
-            "notice_remarks", "business_status", "payment_type", "inactive_remarks", "inactive_reason", "fsic", "fsic_number",
+            "notice_remarks", "business_status", "payment_type", "annual_amount","inactive_remarks", "inactive_reason", "fsic", "fsic_number",
             "capitalization_amount", "gross_sale_amount", "total_employees", "application_status",
             "total_male", "total_female", "location_status", "location_rental_amount", "lessor_name", "owner_signature",
             "collector_signature", "collector_designation", "picture1", "picture2", "picture3", "submitted_from", "created_by", "qrcode_url", "modified_by",

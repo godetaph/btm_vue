@@ -4,6 +4,11 @@ from django.db.models.query import QuerySet
 from django.shortcuts import get_object_or_404, render
 from django.http import HttpResponse, request
 
+from rest_framework.authentication import TokenAuthentication
+from rest_framework.permissions import IsAuthenticated
+from rest_framework.decorators import authentication_classes, permission_classes
+from rest_framework import status
+from rest_framework.response import Response
 
 from rest_framework import viewsets, filters
 from rest_framework import serializers
@@ -87,6 +92,20 @@ class BarangayViewSet(viewsets.ModelViewSet):
     def get_queryset(self):
         return self.queryset.filter(is_deleted=False)
 
+
+# class CreateListMixin:
+#     """Allows bulk creation of a resource."""
+#     def get_serializer(self, *args, **kwargs):
+#         if isinstance(kwargs.get('data', {}), list):
+#             kwargs['many'] = True
+
+#         return super().get_serializer(*args, **kwargs)
+
+# class PaymentsViewSet(viewsets.ModelViewSet):
+#     serializer_class = PaymentSerializer
+#     queryset = Payment.objects.all()
+
+
 #payment_viewset
 class PaymentViewSet(viewsets.ModelViewSet):
     serializer_class = PaymentSerializer
@@ -102,15 +121,22 @@ class PaymentViewSet(viewsets.ModelViewSet):
         return queryset
     
     def perform_create(self, serializer):
-        serializer.save(created_by=self.request.user)
+        print("yo!")
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        print(serializer.errors)
+        # serializer.save(created_by=self.request.user)
 
 #business_viewset
+# @authentication_classes([TokenAuthentication])
+# @permission_classes([IsAuthenticated])
 class BusinessViewSet(viewsets.ModelViewSet):
     pagination_class=BusinessPagination
     serializer_class = BusinessSerializer
     queryset = Business.objects.all()
     filter_backends=(filters.SearchFilter,)
-    search_fields=('business_name', 'business_owner_name', 'business_representative', '^purok', '^lessor_name', '=is_business_permit',
+    search_fields=('=qr_code','business_name', 'business_owner_name', 'business_representative', '^purok', '^lessor_name', '=is_business_permit',
                     '^barangay__barangay_name', '=ownership_type', '=business_permit_status', '=business_status', '=payment_type',
                     '=application_status', '=location_status', '^business_owner_number', 'capitalization_amount', 'gross_sale_amount')
 
@@ -118,14 +144,13 @@ class BusinessViewSet(viewsets.ModelViewSet):
         bar=self.request.query_params.get('bar')
         permit=self.request.query_params.get('permit')
         qrcode=self.request.query_params.get('qrcode')
+        scancode=self.request.query_params.get('scan')
         queryset=Business.objects.all()
-        print(bar)
+
         if qrcode is not None:
-            print (qrcode, ' - qrcode params')
             qr_code=generate_qr_code()
             obj_qrcode=create_qrcode(qr_code)
-            print(obj_qrcode, ' - qrcode')
-            business_name_code="Business ", obj_qrcode
+            business_name_code=f"Business {obj_qrcode}"
             business=Business.objects.create(qr_code=qr_code, qrcode=obj_qrcode, business_name=business_name_code)
             queryset=Business.objects.filter(qrcode=obj_qrcode)
 
@@ -134,6 +159,9 @@ class BusinessViewSet(viewsets.ModelViewSet):
         
         if permit is not None:
             queryset=queryset.filter(is_business_permit=permit)
+
+        if scancode is not None:
+            queryset=Business.objects.filter(qr_code=scancode)
 
         return queryset
 

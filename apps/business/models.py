@@ -118,6 +118,7 @@ class Business(models.Model):
         notice_remarks = models.CharField(max_length=255, blank=True, null=True)
         business_status = models.CharField(max_length=100, blank=True, null=True) 
         payment_type = models.CharField(max_length=20, blank=True, null=True)
+        annual_amount = models.DecimalField(max_digits=10, decimal_places=2, default=0.0, blank=True, null=True)
         inactive_remarks = models.CharField(max_length=255, blank=True, null=True)
         inactive_reason = models.CharField(max_length=50, blank=True, null=True)
         fsic = models.CharField(max_length=10, blank=True, null=True)
@@ -153,17 +154,18 @@ class Business(models.Model):
 
 #payment
 class Payment(models.Model):
+        code = models.IntegerField(blank=True, null=True)
         payment_mode = models.CharField(max_length=50)
         payment_date = models.DateField(auto_now=False)
         paid_to = models.CharField(max_length=255)
         or_no = models.CharField(max_length=50)
         amount_paid = models.DecimalField(max_digits=12, decimal_places=2)
-        business = models.ForeignKey(Business, related_name="business_payments", on_delete=models.CASCADE)
-        created_by = models.ForeignKey(User, related_name="user_payments", on_delete=models.CASCADE)
+        business = models.ForeignKey(Business, related_name="business_payments", on_delete=models.CASCADE, blank=True, null=True)
+        created_by = models.ForeignKey(User, related_name="user_payments", on_delete=models.CASCADE, blank=True, null=True)
         created_on = models.DateTimeField(auto_now_add=True)
 
-        class Meta:
-                ordering = ["-payment_date",]
+        # class Meta:
+        #         ordering = ["-payment_date",]
 
         # def __str__(self):
         #         return self.payment_mode
@@ -221,3 +223,7 @@ class Notification(models.Model):
         def FORMAT(self):
                 from django.utils.timesince import timesince
                 return timesince(self.created_on)
+
+
+        
+        
