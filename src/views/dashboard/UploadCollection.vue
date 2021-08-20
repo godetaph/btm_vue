@@ -14,24 +14,33 @@
                     </div>
                 </div>
 
-                <div class="column" v-if="dataArr.length > 0">
+                <div class="column" v-if="payment.dataArr.length > 0">
                     <div class="box">
                         <div class="field">
                             <div class="control">
-                                <button :class="!load ? 'button is-success is-loading' : 'button is-success'" @click="uploadData">Upload to database</button>
+                                <button class="button is-success" @click="uploadData">Upload to database</button>
                             </div>
                         </div>
                         <table class="table">
                             <thead>
                                 <tr>
-                                    <th>Business</th>
-                                    <th>Owner</th>
+                                    <th>Mode</th>
+                                    <th>Code</th>
+                                    <th>Or no</th>
+                                    <th>Date</th>
+                                    <th>Paid to</th>
+                                    <th>Amount</th>
+
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr v-for="d in dataArr" v-bind:key="d._id">
-                                    <td>{{d._1_Enter_Business_Name}}</td>
-                                    <td>{{d._7_Name_of_the_Business_Owner}}</td>
+                                <tr v-for="d in payment.dataArr" v-bind:key="d.code">
+                                    <td>{{d.payment_mode}}</td>
+                                    <td>{{d.code}}</td>
+                                    <td>{{d.or_no}}</td>
+                                    <td>{{d.payment_date}}</td>
+                                    <td>{{d.paid_to}}</td>
+                                    <td>{{d.amount_paid}}</td>
                                 </tr>
                             </tbody>
                         </table>
@@ -64,15 +73,18 @@
 </template>
 
 <script>
+import axios from 'axios'
 import xlsx from 'xlsx'
+
 export default {
     name: 'UploadCollection',
     data() {
         return {
             load: 'false',
-            dataArr: [], // Table content data array
+            payment: {dataArr: []}, // Table content data array
+            pay: {},
             // countArr: {}, // Analyze the table data and header to get a cross reference array for user-defined consolidation. For the time being, this article only writes the basis, and does not introduce the automatic consolidation of cells~~My other articles have custom merge implementation methods~
-            tableColumn: [], // Table header configuration array
+            tableColumn: [], // Table header szconfiguration array
             tableLoading: false // Whether the table is loading
         }
     },
@@ -80,18 +92,63 @@ export default {
         sleep(ms){
             return new Promise(resolve => setTimeout(resolve, ms))
         },
-        async uploadData() {
+        uploadData() {
             this.load=true
-            await this.sleep(3000)
-            this.dataArr.forEach(element => {
-                console.log(element)
-            });
+            // this.dataArr.forEach(element => {
+            //     console.log(element)
+            // });
+            console.log(this.payment.dataArr.length)
+            console.log(this.payment.dataArr[0])
+            this.pay.code="0111"
+            this.pay.payment_mode="quarter"
+            this.pay.payment_date="2014-01-01"
+            this.pay.amount_paid="1000"
+            this.pay.or_no="0908090"
+            this.pay.business="25"
+            this.pay.created_by="1"
+
+            console.log(this.pay)
+            axios.post("/api/v1/payments/", this.pay)
+                 .then(response => {
+                     toast ({
+                        message: 'New payment was added successfully.',
+                        type: 'is-success',
+                        dismissible: true,
+                        pauseOnHover: true,
+                        duration: 2000,
+                        position: 'bottom-center',
+                     })
+                     //this.$router.push(`/dashboard/payments/${businessId}`)
+                 })
+                 .catch(error => {
+                     console.log(JSON.stringify(error))
+                 })
+            // for (let i=0; i < this.payment.dataArr.length; i++){
+            //     console.log(this.payment.dataArr[i])
+            //     axios.post('/api/v1/payments/', this.payment.dataArr[i])
+            //             .then(response => {
+            //                 console.log(response.statusText)
+            //             })
+            // }
             
             this.load=false
         },
         clickLoad(){
             this.load=!this.load
             console.log(this.load)
+        },
+        formatDate(date) {
+            var d = new Date(date),
+                month = '' + (d.getMonth() + 1),
+                day = '' + d.getDate(),
+                year = d.getFullYear();
+
+            if (month.length < 2) 
+                month = '0' + month;
+            if (day.length < 2) 
+                day = '0' + day;
+
+            return [year, month, day].join('-');
         },
         getHeader(sheet) {
             const XLSX = xlsx;
@@ -145,10 +202,14 @@ export default {
                 const excellist = [];  // Clear received data
                 // Edit data
                 for (var i = 0; i < ws.length; i++) {
+                    var date = new Date(ws[i].payment_date) 
+                    ws[i].payment_date = this.formatDate(new Date(Math.round((date - 25569)*86400*1000)))
                     excellist.push(ws[i]);
+                    // var date = new Date(ws[i].date) 
+                    //console.log(new Date(Math.round((date - 25569)*86400*1000)))
                 }
-                this.dataArr=excellist
-                console.log("Read results", this.dataArr); // At this point, you get an array containing objects that need to be processed
+                this.payment.dataArr=excellist
+                console.log("Read results", this.payment.dataArr); // At this point, you get an array containing objects that need to be processed
                 
                 const a = workbook.Sheets[workbook.SheetNames[0]]
                 const headers = this.getHeader(a)
@@ -156,8 +217,9 @@ export default {
 
                 // this.setTable(headers, excellist)
 
-                } catch (e) {
-                    return alert("Read failure!");;
+                } 
+                catch (e) {
+                    return alert(e + " - Read failure!");;
                 }
             };
             fileReader.readAsBinaryString(files[0]);
@@ -190,6 +252,7 @@ export default {
         this.tableColumn = tableTitleData;
         this.dataArr = newTableData;
         },
+        
 }
 </script>
 

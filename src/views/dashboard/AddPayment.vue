@@ -94,6 +94,7 @@ export default {
             console.log(payment_date + " " + businessId)
             this.payment.business=businessId
             this.payment.payment_date = payment_date
+            console.log(this.payment)
             axios.post("/api/v1/payments/", this.payment)
                  .then(response => {
                      toast ({

@@ -1,13 +1,15 @@
 <template>
     <div class="page-my-account">
-        <h1 class="title is-5">My Account</h1>
+        <div class="is-size-5"><strong>BTM</strong> | <span class="has-text-info">My</span>Account</div>
+        <hr>
         <strong>Team: </strong> {{team.name}} <br>
-        <strong>Username: </strong> {{$store.state.user.username}}
+        <strong>Address: </strong> {{team.team_address}} <br>
+        <strong>Username: </strong> <span class="tag is-info">{{$store.state.user.username}}</span> 
         <hr>
 
         <div class="buttons">
-            <!-- <router-link to="/dashboard/my-account/edit-team" class="button is-light">Edit team</router-link> -->
-            <button @click="logout()" class="button is-danger">Log out</button>
+            <router-link to="/dashboard/my-account/edit-team" class="button is-outline-black is-small">Edit team</router-link>
+            <button @click="logout()" class="button is-danger is-small">Log out</button>
         </div>
         
     </div>
@@ -21,7 +23,17 @@ export default {
             team: {}
         }
     },
+    async mounted() {
+        await this.getTeam()
+    },
     methods: {
+        getTeam() {
+            axios.get('/api/v1/teams/')
+                 .then(response => {
+                     this.team=response.data[0]
+                 })
+                 .catch(error => JSON.stringify(error))
+        },
         logout() {
             axios.post("/api/v1/token/logout/")
                  .then(response => {

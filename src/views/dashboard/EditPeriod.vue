@@ -81,7 +81,7 @@ export default {
                         dismissible: true,
                         pauseOnHover: true,
                         duration: 2000,
-                        position: 'top-left',
+                        position: 'bottom-center',
                      })
                      this.$router.push("/dashboard/periods")
                  })

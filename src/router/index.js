@@ -37,6 +37,9 @@ import BusinessPeriods from '../views/dashboard/BusinessPeriods'
 import AddBusinessPeriod from '../views/dashboard/AddBusinessPeriod'
 import EditBusinessPeriod from '../views/dashboard/EditBusinessPeriod'
 import UploadCollection from '../views/dashboard/UploadCollection'
+import Setting from '../views/dashboard/Setting'
+import EditTeam from '../views/dashboard/EditTeam'
+import ScanQrCode from '../views/dashboard/ScanQrCode.vue'
 
 import store from '../store'
 
@@ -73,9 +76,25 @@ const routes = [
     }
   },
   {
+    path: '/dashboard/my-account/edit-team',
+    name: 'EditTeam',
+    component: EditTeam,
+    meta: {
+      requireLogin: true
+    }
+  },
+  {
     path: '/dashboard/map',
     name: 'Map',
     component: Map,
+    meta: {
+      requireLogin: true
+    }
+  },
+  {
+    path: '/dashboard/scan',
+    name: 'ScanQrCode',
+    component: ScanQrCode,
     meta: {
       requireLogin: true
     }
@@ -92,6 +111,14 @@ const routes = [
     path: '/dashboard/users',
     name: 'Users',
     component: Users,
+    meta: {
+      requireLogin: true
+    }
+  },
+  {
+    path: '/dashboard/settings',
+    name: 'Setting',
+    component: Setting,
     meta: {
       requireLogin: true
     }

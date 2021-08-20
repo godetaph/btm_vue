@@ -12,6 +12,8 @@
                             <li><router-link to="/dashboard/periods"><strong>Periodic year (Fical Year)</strong></router-link></li>
                             <hr>
                             <li><router-link to="/dashboard/users"><strong>User Management</strong></router-link></li>
+                            <hr>
+                            <li><router-link to="/dashboard/settings"><strong>Settings</strong></router-link></li>
                         </ul>
                     </div>
                 </div>
