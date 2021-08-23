@@ -20,7 +20,9 @@
                                 <td>{{category.category_name}}</td>
                                 <td> 
                                     <router-link :to="{ name: 'EditCategory', params: {id: category.id} }" class="">Edit</router-link> | 
-                                    <router-link :to="{ name: 'DeleteCategory', params: {id: category.id} }" class="">Delete</router-link>
+                                    <!-- <router-link :to="{ name: 'DeleteCategory', params: {id: category.id} }" class="">Delete</router-link> -->
+                                    <!-- <a href="#"><i class="fa fa-trash" @click="deleteCategory(category)"></i>delete</a>  -->
+                                    <a href="#" @click="deleteCategory(category)">Delete</a> 
                                 </td>
                             </tr>
                         </tbody>
@@ -42,6 +44,7 @@
 </template>
 <script>
 import axios from 'axios'
+import Swal from "sweetalert2"
 export default {
     name: 'Categories',
     data() {
@@ -88,6 +91,37 @@ export default {
                      console.log(JSON.stringify(error))
                  })
         },
+        deleteCategory(category){
+            Swal.fire({
+                title: 'You are about to delete this record.',
+                // text: 'Press YES to continue.',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: 'hsl(141, 71%, 48%)',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes, continue!'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    axios.delete(`/api/v1/categories/${category.id}`)
+                        .then(response => {
+                            console.log(response.statusText)
+                            Swal.fire({
+                                title: 'Deleted!',
+                                text: 'Your record has been deleted.',
+                                icon: 'success',
+                                confirmButtonText: 'Confirmed.'
+                            })
+                            this.getCategories()
+                            // this.$router.push('/dashboard/categories')
+                        })
+                        .catch(error => {
+                            console.log(JSON.stringify(error))
+                        })
+
+                    
+                }
+            })
+        }
     }
 }
 </script>

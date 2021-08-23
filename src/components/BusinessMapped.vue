@@ -1,6 +1,5 @@
 <template>
     <div class="column is-12">
-        <router-link to="/dashboard/businesses/add" class="button is-dark mb-4 is-small">Add business</router-link>
 
         <form @submit.prevent="submitForm" class="mb-3">
             <div class="field has-addons">

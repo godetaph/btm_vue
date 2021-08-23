@@ -31,59 +31,66 @@
                 <div class="column is-12 mb-4">
                     <div class="columns">
                         <div class="field ml-4">
-                            <label for="" class="is-size-7" >QR Code</label>
-                            <div class="control">
+                            <label for="" class="is-size-7">QR Code</label>
+                            <div class="control mb-2">
                                 <input type="text" style="width:250px" class="input is-small" name="qr_code" v-model="business.qr_code" disabled>
+                            </div>
+
+                            <label for="" class="is-size-7">Business code</label>
+                            <div class="control">
+                                <input type="text" class="input is-small" name="qr_code" v-model="business.business_code">
                             </div>
                         </div>
                     </div>
                 </div>
                 
                     <div class="column is-12"><strong class="is-size-7 has-text-grey-light">Business basic information:</strong></div>
-                    <div class="column is-9">
-                        <div class="field">
-                            <label for="" class="is-size-7">Business name</label>
-                            <div class="control">
-                                <input type="text" class="input is-small is-uppercase" name="business_name" v-model="business.business_name">
+                    <!-- <div class="columns"> -->
+                        <div class="column is-9">
+                            <div class="field">
+                                <label for="" class="is-size-7">Business name</label>
+                                <div class="control">
+                                    <input type="text" class="input is-small is-uppercase" name="business_name" v-model="business.business_name">
+                                </div>
                             </div>
                         </div>
-                    </div>
 
-                    <div class="column is-3">
-                        <div class="field">
-                            <label for="" class="is-size-7">Owner contact no.</label>
-                            <div class="control">
-                                <input type="text" class="input is-small" name="business_owner_number" v-model="business.business_owner_number">
+                        <div class="column is-3">
+                            <div class="field">
+                                <label for="" class="is-size-7">Owner contact no.</label>
+                                <div class="control">
+                                    <input type="text" class="input is-small" name="business_owner_number" v-model="business.business_owner_number">
+                                </div>
                             </div>
                         </div>
-                    </div>
-                    <div class="column is-9">
-                        <div class="field">
-                            <label for="" class="is-size-7">Business owner name</label>
-                            <div class="control">
-                                <input type="text" class="input is-small is-uppercase" name="business_owner_name" v-model="business.business_owner_name">
+                        <div class="column is-9">
+                            <div class="field">
+                                <label for="" class="is-size-7">Business owner name</label>
+                                <div class="control">
+                                    <input type="text" class="input is-small is-uppercase" name="business_owner_name" v-model="business.business_owner_name">
+                                </div>
                             </div>
                         </div>
-                    </div>
-                    
-                    <div class="column is-2">
-                        <label for="" class="is-size-7">Gender</label>
-                        <div class="select is-small">
-                            <select name="gender" id="" v-model="business.owner_gender">
-                                <option value="" selected>-- Select gender --</option>
-                                <option value="male">Male</option>
-                                <option value="female">Female</option>
-                            </select>
-                        </div>
-                    </div>
-                    <div class="column is-6">
-                        <div class="field">
-                            <label for="" class="is-size-7">Representative name</label>
-                            <div class="control">
-                                <input type="text" class="input is-small is-uppercase" name="business_representative" v-model="business.business_representative">
+                        
+                        <div class="column is-2">
+                            <label for="" class="is-size-7">Gender</label>
+                            <div class="select is-small">
+                                <select name="gender" id="" v-model="business.owner_gender">
+                                    <option value="" selected>-- Select gender --</option>
+                                    <option value="male">Male</option>
+                                    <option value="female">Female</option>
+                                </select>
                             </div>
                         </div>
-                    </div>
+                        <div class="column is-6">
+                            <div class="field">
+                                <label for="" class="is-size-7">Representative name</label>
+                                <div class="control">
+                                    <input type="text" class="input is-small is-uppercase" name="business_representative" v-model="business.business_representative">
+                                </div>
+                            </div>
+                        </div>
+                    <!-- </div> -->
 
                     <div class="column is-12 "><strong class="is-size-7 has-text-grey-light">Address and GPS Location:</strong></div>
                     <div class="column is-5">
@@ -495,6 +502,7 @@ export default {
             business: {},
             barangays: [],
             qrcode: {},
+            qr_id: '',
             categories: [],
             business_categories: [],
             fullWidthImage: false,
@@ -520,6 +528,8 @@ export default {
             axios.get(`/api/v1/qrcodes?qr_code=${qrcode}`)
                  .then(response => {
                      this.qrcode=response.data[0]
+                     console.log(this.qrcode.id + ' - qrcode1')
+                     this.qr_id = this.qrcode.id
                  })
                  .catch(error => {
                      console.log(JSON.stringify(error))
@@ -684,6 +694,7 @@ export default {
             // formData.append('business_representative', this.business.business_representative)
             // formData.append('barangay', this.business.barangay)
 
+            // this.business.qrcode = "\\" + this.qrcode.id
             this.business.submitted_from = 'web'
             this.business.created_by = this.$store.state.user.id
             this.business.modified_by = this.$store.state.user.id

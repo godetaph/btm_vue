@@ -152,6 +152,7 @@
 </template>
 <script>
 import axios from 'axios'
+import Swal from "sweetalert2"
 // import LocationMap from '../../components/LocationMap.vue'
 export default {
     name: 'Business',
@@ -251,19 +252,34 @@ export default {
                  })
         },
         deleteBusiness(business){
-            if (confirm("You are about to delete the business, continue?")){
-                console.log(business)
-                axios.delete(`/api/v1/businesses/${business.id}`)
+            Swal.fire({
+                title: 'You are about to delete this record.',
+                // text: 'Press YES to continue.',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: 'hsl(141, 71%, 48%)',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes, continue!'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    axios.delete(`/api/v1/businesses/${business.id}`)
                      .then(response => {
                          console.log(response.statusText)
+                         Swal.fire({
+                            title: 'Deleted!',
+                            text: 'Your record has been deleted.',
+                            icon: 'success',
+                            confirmButtonText: 'Confirmed.'
+                         })
                          this.$router.push('/dashboard/businesses')
                      })
                      .catch(error => {
                          console.log(JSON.stringify(error))
                      })
-            }
-            
-                 
+
+                    
+                }
+            })
         }
     }
 }

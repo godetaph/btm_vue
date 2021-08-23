@@ -123,7 +123,6 @@
                     <th>Stall no</th>
                     <th>Permit</th>
                     <th>Appln</th>
-                    <th>Location</th>
                     <th class="has-text-right">Capital</th>
                     <th class="has-text-right">Gross</th>
                     <th >Action</th>
@@ -141,7 +140,6 @@
                     <td>{{business.stall_no}}</td>
                     <td>{{business.is_business_permit}}</td>
                     <td>{{business.application_status}}</td>
-                    <td>{{business.location_status}}</td>
                     <td class="has-text-right">{{Number(business.capitalization_amount).toLocaleString('en-US', {minimumFractionDigits:2, maximumFractionDigits:2})}}</td>
                     <td class="has-text-right">{{Number(business.gross_sale_amount).toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})}}</td>
                     <td>
@@ -157,7 +155,6 @@
             </tbody>
             <tfoot>
                 <td><strong>Total count:</strong></td>
-                <td></td>
                 <td></td>
                 <td></td>
                 <td></td>

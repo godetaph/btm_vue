@@ -18,7 +18,8 @@
                                 <td>{{barangay.barangay_name}}</td>
                                 <td>
                                     <router-link :to="{ name: 'EditBarangay', params: {id:barangay.id}}">Edit</router-link> | 
-                                    <router-link :to="{ name: 'DeleteBarangay', params: {id:barangay.id}}">Delete</router-link>
+                                    <!-- <router-link :to="{ name: 'DeleteBarangay', params: {id:barangay.id}}">Delete</router-link> -->
+                                    <a href="#" @click="deleteBarangay(barangay)">Delete</a>
                                 </td>
                             </tr>
                         </tbody>
@@ -40,6 +41,8 @@
 </template>
 <script>
 import axios from 'axios'
+import Swal from 'sweetalert2'
+
 export default {
     name: 'Barangays',
     data() {
@@ -83,6 +86,37 @@ export default {
                  .catch(error => {
                      console.log(JSON.stringify(error))
                  })
+        },
+        deleteBarangay(barangay){
+            Swal.fire({
+                title: 'You are about to delete this record.',
+                // text: 'Press YES to continue.',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: 'hsl(141, 71%, 48%)',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes, continue!'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    axios.delete(`/api/v1/barangays/${barangay.id}`)
+                        .then(response => {
+                            console.log(response.statusText)
+                            Swal.fire({
+                                title: 'Deleted!',
+                                text: 'Your record has been deleted.',
+                                icon: 'success',
+                                confirmButtonText: 'Confirmed.'
+                            })
+                            this.getBarangay()
+                            // this.$router.push('/dashboard/categories')
+                        })
+                        .catch(error => {
+                            console.log(JSON.stringify(error))
+                        })
+
+                    
+                }
+            })
         }
     }
 }

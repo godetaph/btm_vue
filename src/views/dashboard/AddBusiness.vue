@@ -22,6 +22,11 @@
                             <div class="control">
                                 <input type="text" class="input is-small" name="qr_code" v-model="business.qr_code" disabled>
                             </div>
+
+                            <label for="">Business code</label>
+                            <div class="control">
+                                <input type="text" class="input is-small" name="qr_code" v-model="business.business_code">
+                            </div>
                         </div>
                     </div>
                     <div class="column is-9">

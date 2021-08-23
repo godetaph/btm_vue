@@ -14,8 +14,10 @@
     "chart.js": "^2.9.4",
     "core-js": "^3.6.5",
     "moment": "^2.29.1",
+    "sweetalert2": "^11.1.4",
     "vue": "^3.0.0",
     "vue-router": "^4.0.0-0",
+    "vue-sweetalert2": "^5.0.2",
     "vue2-google-maps": "^0.10.7",
     "vuex": "^4.0.0-0",
     "xlsx": "^0.17.0"

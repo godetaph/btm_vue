@@ -6,7 +6,7 @@
               <hr>
                 <div class="column is-12">
                     <div class="notification" v-for="notification in notifications" v-bind:key="notification.id">
-                        <button class="delete is-pulled-right" @click="clickDelete(notification)"></button>
+                        <button class="delete is-pulled-right" @click="deleteNotification(notification)"></button>
                         <div class="title is-6 mb-4 has-text-primary">{{notification.business_name}}</div>
                         <p class="mb-2 has-text-dark">Message: <strong>{{notification.message}}</strong></p>
                         <p v-if="notification.append_type=='Period'"><span class="tag is-info">{{notification.append_type}}</span> - on {{notification.created_on}} | {{notification.created}} ago</p>
@@ -30,6 +30,7 @@
 <script>
 import axios from 'axios'
 import { toast } from 'bulma-toast'
+import Swal from 'sweetalert2'
 
 export default {
     name: 'Notifications',
@@ -99,6 +100,42 @@ export default {
                  .catch(error => {
                      console.log(JSON.stringify(error))
                  })
+        },
+        deleteNotification(notification){
+            Swal.fire({
+                title: 'You are about to delete this record.',
+                // text: 'Press YES to continue.',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: 'hsl(141, 71%, 48%)',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes, continue!'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    this.notification=notification
+                    axios.delete(`/api/v1/notifications/${this.notification.id}/`)
+                        .then(response => {
+                            this.isDeleted=true
+                            this.getNotifications()
+                            this.getCount()
+
+                            console.log(response.statusText)
+                            Swal.fire({
+                                title: 'Deleted!',
+                                text: 'Your record has been deleted.',
+                                icon: 'success',
+                                confirmButtonText: 'Confirmed.'
+                            })
+                            
+                            // this.$router.push('/dashboard/categories')
+                        })
+                        .catch(error => {
+                            console.log(JSON.stringify(error))
+                        })
+
+                    
+                }
+            })
         },
         clickDelete(notification) {
             console.log(notification.id)

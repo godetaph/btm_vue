@@ -8,7 +8,8 @@ export default createStore({
     },
     isAuthenticated: false,
     token: '',
-    notificationCount:0
+    notificationCount:0,
+    qrid:''
   },
   mutations: {
     initializeStore(state){

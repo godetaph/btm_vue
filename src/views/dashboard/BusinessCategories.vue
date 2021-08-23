@@ -35,7 +35,9 @@
                             <td>{{busCategory.is_pushed}}</td>
                             <td>
                                 <router-link :to="{name: 'EditBusinessCategory', params: {id:busCategory.id, businessId:business.id}}">Edit</router-link> | 
-                                <router-link :to="{name: 'DeleteBusinessCategory', params: {id:busCategory.id, businessId:business.id}}">Delete</router-link>
+                                <!-- <router-link :to="{name: 'DeleteBusinessCategory', params: {id:busCategory.id, businessId:business.id}}">Delete</router-link> -->
+
+                                <a href="#" @click="deleteCategory(busCategory)">Delete</a>
                             </td>
                         </tr>
                     </tbody>
@@ -46,6 +48,8 @@
 </template>
 <script>
 import axios from 'axios'
+import Swal from 'sweetalert2'
+
 export default {
     name: 'BusinessCategories',
     data() {
@@ -70,9 +74,11 @@ export default {
                 })
         },
         getBusinessCategories(){
+            
             const businessId=this.$route.params.id
             axios.get(`/api/v1/business-categories?business=${businessId}`)
                  .then(response => {
+                     this.busCategories=[]
                      for (let i = 0; i < response.data.length; i++) {
                          this.busCategories.push(response.data[i])
                      }
@@ -80,6 +86,38 @@ export default {
                  .catch(error => {
                      console.log(JSON.stringify(error))
                  })
+        },
+        deleteCategory(category){
+            Swal.fire({
+                title: 'You are about to delete this record.',
+                // text: 'Press YES to continue.',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: 'hsl(141, 71%, 48%)',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes, continue!'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    axios.delete(`/api/v1/business-categories/${category.id}`)
+                        .then(response => {
+                            this.getBusinessCategories()
+                            console.log(response.statusText)
+                            Swal.fire({
+                                title: 'Deleted!',
+                                text: 'Your record has been deleted.',
+                                icon: 'success',
+                                confirmButtonText: 'Confirmed.'
+                            })
+                            
+                            // this.$router.push('/dashboard/categories')
+                        })
+                        .catch(error => {
+                            console.log(JSON.stringify(error))
+                        })
+
+                    
+                }
+            })
         }
     }
 }
