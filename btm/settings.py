@@ -11,9 +11,14 @@ https://docs.djangoproject.com/en/3.2/ref/settings/
 """
 
 import os
+import environ
 import django_heroku
 import dj_database_url
 from pathlib import Path
+
+#environ
+env=environ.Env()
+environ.Env.read_env()
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -166,5 +171,19 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 MEDIA_URL = '/media/'
 
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+
+
+# storage
+DEFAULT_FILE_STORAGE = env('FILE_STORAGE')
+AWS_ACCESS_KEY_ID = env('KEY_ID')
+AWS_SECRET_ACCESS_KEY = env('KEY_ACCESS')
+AWS_STORAGE_BUCKET_NAME = env('STORAGE_NAME')
+AWS_QUERYSTRING_AUTH = False
+
+# DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
+# AWS_ACCESS_KEY_ID = 'AKIATX27XVP6LKYVSC7M'
+# AWS_SECRET_ACCESS_KEY = '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'
+# AWS_STORAGE_BUCKET_NAME = 'btm-101'
+# AWS_QUERYSTRING_AUTH = False
 
 django_heroku.settings(locals())
