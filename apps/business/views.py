@@ -11,6 +11,7 @@ from rest_framework import status
 from rest_framework.response import Response
 
 from rest_framework import viewsets, filters
+# from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import serializers
 from rest_framework.fields import BuiltinSignatureError, MISSING_ERROR_MESSAGE
 from rest_framework.serializers import Serializer
@@ -258,6 +259,8 @@ class NotificationViewSet(viewsets.ModelViewSet):
     serializer_class=NotificationSerializer
     queryset=Notification.objects.all()
     pagination_class=NotificationPagination
+    filter_backends=(filters.SearchFilter,)
+    search_fields=["message", "^append_type", "^business__business_name"]
 
     def get_queryset(self):
         is_read=self.request.query_params.get('is_read')
@@ -279,9 +282,11 @@ class PeriodViewSet(viewsets. ModelViewSet):
 class BusinessPeriodViewSet(viewsets.ModelViewSet):
     serializer_class=BusinessPeriodSerializer
     queryset=BusinessPeriod.objects.all()
+    # filter_backends = [DjangoFilterBackend]
+    # filterset_fields= ['period', 'business']
 
     def perform_create(self, serializer):
-        serializer.save(created_by=self.request.user, collector=self.request.user)
+        serializer.save()
         create_notification(self.request, message=serializer.data['comment'], is_read=False, business=serializer.data['business'], append_type='Period')
 
 

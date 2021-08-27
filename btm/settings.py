@@ -31,10 +31,10 @@ DEBUG = True
 ALLOWED_HOSTS = ['127.0.0.1', 'localhost', 'btm-101.herokuapp.com']
 
 CORS_ALLOWED_ORIGINS = [
-    "https://midsayap-btm.netlify.app",
-    #"http://localhost:8080",
-    "https://btm-101.herokuapp.com"
-    #"http://127.0.0.1:8000"
+    # "https://midsayap-btm.netlify.app",
+    "http://localhost:8080",
+    # "https://btm-101.herokuapp.com"
+    "http://127.0.0.1:8000"
 ]
 
 REST_FRAMEWORK = {
@@ -46,7 +46,8 @@ REST_FRAMEWORK = {
     ),
     'DEFAULT_PERSMISSION_CLASSES' : (
         'rest_framework.permissions.IsAuthenticated',
-    )
+    ),
+    # 'DEFAULT_FILTER_BACKENDS': ['django_filters.rest_framework.DjangoFilterBackend']
 }
 
 #AUTH_USER_MODEL='user.User'
@@ -64,6 +65,7 @@ INSTALLED_APPS = [
     'rest_framework.authtoken',
     'corsheaders',
     'djoser',
+    'django_filters',
     'apps.business',
     'apps.team',
     'apps.seting',

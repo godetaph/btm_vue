@@ -130,7 +130,7 @@ class Business(models.Model):
         total_male = models.IntegerField(blank=True, null=True, default=0)
         total_female = models.IntegerField(blank=True, null=True, default=0)
         location_status = models.CharField(max_length=20, blank=True, null=True)
-        location_rental_amount = models.DecimalField(max_digits=7, decimal_places=2, blank=True, null=True)
+        location_rental_amount = models.DecimalField(max_digits=7, decimal_places=2, default=0.00, blank=True, null=True)
         lessor_name = models.CharField(max_length=255, blank=True, null=True)
         owner_signature = models.ImageField(upload_to='media/owner_sig_pic/', height_field=None, width_field=None, max_length=None, blank=True, null=True)
         collector_signature = models.ImageField(upload_to='media/collector_sig_pic/', height_field=None, width_field=None, max_length=None, blank=True, null=True)
@@ -200,14 +200,15 @@ class Period(models.Model):
 class BusinessPeriod(models.Model):
         period=models.ForeignKey(Period, related_name="periods", on_delete=models.CASCADE)
         business=models.ForeignKey(Business, related_name="business_periods", on_delete=models.CASCADE)
-        collector=models.ForeignKey(User, related_name="collector_business_periods", on_delete=models.CASCADE)
+        collector=models.ForeignKey(User, related_name="collector_business_periods", on_delete=models.CASCADE, blank=True, null=True )
         comment=models.CharField(max_length=255, blank=True, null=True)
-        created_by=models.ForeignKey(User, related_name="user_business_periods", on_delete=models.CASCADE)
+        created_by=models.ForeignKey(User, related_name="user_business_periods", on_delete=models.CASCADE, blank=True, null=True)
         created_on=models.DateTimeField(auto_now_add=True)
 
         class Meta:
                 ordering=["-created_on"]
 
+        
 #notifications
 class Notification(models.Model):
         message=models.CharField(max_length=255)

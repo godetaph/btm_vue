@@ -95,5 +95,5 @@ class BusinessPeriodSerializer(serializers.ModelSerializer):
     
     class Meta:
         model=BusinessPeriod
-        read_only_fields=("created_on", "collector")
-        fields=("id", "period", "business", "comment", "business_name", "business_owner", "barangay", "purok", "permit", "created_by",)
+        read_only_fields=("created_on",)
+        fields=("id", "period", "business", "comment", "business_name", "business_owner", "barangay", "purok", "permit", "created_by", "collector",)
