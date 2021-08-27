@@ -5,8 +5,24 @@
               <div class="is-size-5"><strong>BTM</strong>Notifications</div>
               <hr>
                 <div class="column is-12">
+                    <form @submit.prevent="submitForm" action="" class="mb-4">
+                        <div class="field has-addons">
+                            <div class="control">
+                                <input type="text" class="input is-small" style="width:300px;" v-model="query">
+                            </div>
+                            <div class="control">
+                                <button class="button is-success ml-2 is-small">Search</button>
+                            </div>
+                            <!-- <div class="control">
+                                <button class="button is-light ml-2 is-small" @click="showSearch">Advanced search</button>
+                            </div> -->
+                        </div>
+                    </form>
+
+                    <div class="is-size-7 mb-2"><strong class="has-text-grey-light">NOTIFICATION DISPLAY</strong> </div>
+
                     <div class="notification" v-for="notification in notifications" v-bind:key="notification.id">
-                        <button class="delete is-pulled-right" @click="deleteNotification(notification)"></button>
+                        <button class="delete is-pulled-right" @click="deleteNotification(notification)" v-if="this.$store.state.user.level=='admin'"></button>
                         <div class="title is-6 mb-4 has-text-primary">{{notification.business_name}}</div>
                         <p class="mb-2 has-text-dark">Message: <strong>{{notification.message}}</strong></p>
                         <p v-if="notification.append_type=='Period'"><span class="tag is-info">{{notification.append_type}}</span> - on {{notification.created_on}} | {{notification.created}} ago</p>
@@ -42,7 +58,8 @@ export default {
             isDeleted:false,
             currentPage: 1,
             showNext: false,
-            showPrev: false
+            showPrev: false,
+            query: ''
         }
     },
     async mounted() {
@@ -60,7 +77,7 @@ export default {
         },
         getNotifications() {
             this.notifications=[]
-            axios.get(`/api/v1/notifications/?page=${this.currentPage}`)
+            axios.get(`/api/v1/notifications/?page=${this.currentPage}&search=${this.query}`)
                  .then(response => {
                     this.showNext=false
                     this.showPrev=false
@@ -80,6 +97,9 @@ export default {
                  .catch(error => {
                      console.log(JSON.stringify(error))
                  })
+        },
+        submitForm(){
+            this.getNotifications()
         },
         clickRead(notification) {
             this.notification=notification

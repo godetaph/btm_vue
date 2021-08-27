@@ -37,7 +37,7 @@
                                 <router-link :to="{name: 'EditBusinessCategory', params: {id:busCategory.id, businessId:business.id}}">Edit</router-link> | 
                                 <!-- <router-link :to="{name: 'DeleteBusinessCategory', params: {id:busCategory.id, businessId:business.id}}">Delete</router-link> -->
 
-                                <a href="#" @click="deleteCategory(busCategory)">Delete</a>
+                                <a href="#" @click="deleteCategory(busCategory)" v-if="this.$store.state.user.level=='admin'">Delete</a>
                             </td>
                         </tr>
                     </tbody>

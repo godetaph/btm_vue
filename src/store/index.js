@@ -4,7 +4,9 @@ export default createStore({
   state: {
     user: {
       id: '',
-      username: ''
+      username: '',
+      level: '',
+
     },
     isAuthenticated: false,
     token: '',

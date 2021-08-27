@@ -85,6 +85,9 @@ export default {
         submitForm(){
             this.business_period.business=this.business.id
             this.business_period.period=this.period.id
+            this.business_period.created_by=this.$store.state.user.id
+            this.business_period.collector=this.$store.state.user.id
+            console.log(this.business_period)
             axios.post('/api/v1/business-periods/', this.business_period)
                  .then(response => {
                      console.log(response.statusText)

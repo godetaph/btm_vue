@@ -5,9 +5,9 @@
             <div class="field has-addons">
                 <div class="control">
                     <div class="select is-small" style="width:200px;">
-                        <select name="" id="" class="select is-small">
+                        <select name="" id="" class="select is-small" v-model="period">
                             <option value="">--Year period--</option>
-                            <option value="2021">2021</option>
+                            <option :value="period.id" v-for="period in periods" v-bind:key="period.id">{{period.period_year}}</option>
                         </select>
                     </div>
                 </div>
@@ -94,11 +94,14 @@ export default {
             currentPage: 1,
             showNext: false,
             showPrev: false,
-            query: ''
+            query: '',
+            periods:[],
+            period: ''
         }
     },
     mounted() {
         this.getBusinessPeriods()
+        this.getPeriods()
     },
     methods: {
         loadNext() {
@@ -108,6 +111,14 @@ export default {
         loadPrev() {
             this.currentPage -= 1
             this.getBusinesses()
+        },
+        getPeriods(){
+            axios.get('/api/v1/periods/')
+                 .then(response => {
+                     response.data.forEach(element => {
+                         this.periods.push(element)
+                     });
+                 })
         },
         getBusinessPeriods() {
             this.business_periods.length=0

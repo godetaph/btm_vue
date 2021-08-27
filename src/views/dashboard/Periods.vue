@@ -22,7 +22,7 @@
                             <td>{{period.is_active}}</td>
                             <td>
                                 <router-link :to="{ name: 'EditPeriod', params: {id: period.id} }" class="">Edit</router-link> | 
-                                <router-link :to="{ name: 'DeletePeriod', params: {id: period.id} }" class="">Delete</router-link>
+                                <router-link :to="{ name: 'DeletePeriod', params: {id: period.id} }" class="" v-if="this.$store.state.user.level=='admin'">Delete</router-link>
                             </td>                            
                         </tr>
                     </tbody>

@@ -13,7 +13,7 @@
                             </div>
                         </div>
                         <div class="field">
-                            <label for="">Username</label>
+                            <label for="">Password</label>
                             <div class="control">
                                 <input type="password" class="input" name="password" v-model="password">
                             </div>
@@ -77,12 +77,22 @@ export default {
 
             axios.get("/api/v1/users/me/")
                  .then(response => {
+                     let level = ''
+                     //if (response.data.username.)
+                     if (response.data.username.substring(0,3) == 'adm'){
+                         level='admin'
+                     }
+                     else{
+                         level='staff'
+                     }
                      this.$store.commit('setUser', {
                          'username': response.data.username,
-                         'id': response.data.id
+                         'id': response.data.id,
+                         'level': level
                      })
                      localStorage.setItem('username', response.data.username)
                      localStorage.setItem('userid', response.data.id)
+                     localStorage.setItem('level', level)
 
                      this.$router.push('/dashboard')
                  })

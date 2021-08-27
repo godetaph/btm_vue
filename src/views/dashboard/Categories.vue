@@ -22,7 +22,7 @@
                                     <router-link :to="{ name: 'EditCategory', params: {id: category.id} }" class="">Edit</router-link> | 
                                     <!-- <router-link :to="{ name: 'DeleteCategory', params: {id: category.id} }" class="">Delete</router-link> -->
                                     <!-- <a href="#"><i class="fa fa-trash" @click="deleteCategory(category)"></i>delete</a>  -->
-                                    <a href="#" @click="deleteCategory(category)">Delete</a> 
+                                    <a href="#" @click="deleteCategory(category)" v-if="this.$store.state.user.level=='admin'">Delete</a> 
                                 </td>
                             </tr>
                         </tbody>

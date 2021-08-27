@@ -9,11 +9,11 @@
                         <ul>
                             <li><router-link to="/dashboard/categories"><strong>Categories</strong></router-link></li>
                             <li><router-link to="/dashboard/barangays"><strong>Barangays</strong></router-link></li>
-                            <li><router-link to="/dashboard/periods"><strong>Periodic year (Fical Year)</strong></router-link></li>
+                            <li v-if="this.$store.state.user.level=='admin'"><router-link to="/dashboard/periods"><strong>Periodic year (Fical Year)</strong></router-link></li>
                             <hr>
-                            <li><router-link to="/dashboard/users"><strong>User Management</strong></router-link></li>
+                            <li v-if="this.$store.state.user.level=='admin'"><router-link to="/dashboard/users"><strong>User Management</strong></router-link></li>
                             <hr>
-                            <li><router-link to="/dashboard/settings"><strong>Settings</strong></router-link></li>
+                            <li v-if="this.$store.state.user.level=='admin'"><router-link to="/dashboard/settings"><strong>Settings</strong></router-link></li>
                         </ul>
                     </div>
                 </div>

@@ -38,7 +38,7 @@
                                 <td>{{payment.amount_paid}}</td>
                                 <td>
                                     <router-link :to="{name: 'EditPayment', params: {id: payment.id, businessId: business.id}}">Edit</router-link> | 
-                                    <router-link :to="{name: 'DeletePayment', params: {id: payment.id, businessId: business.id}}">Delete</router-link>
+                                    <router-link :to="{name: 'DeletePayment', params: {id: payment.id, businessId: business.id}}" v-if="this.$store.state.user.level=='admin'">Delete</router-link>
                                 </td>
                             </tr>
                         </tbody>

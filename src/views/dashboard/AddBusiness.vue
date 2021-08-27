@@ -6,17 +6,21 @@
                     <hr>
                 </div>
 
-                    <div class="box ml-4">
-                        <figure class="image is-128x128" v-if="!business.qrcode_url">
-                            <img src="https://versions.bulma.io/0.7.0/images/placeholders/128x128.png">
-                        </figure>
-                        <figure class="image is-128x128" v-else>
-                            <img :src="business.qrcode_url" alt="">
-                        </figure>
+                    <div class="columns"> 
+                        <div class="column is-12">
+                            <div class="box ml-4">
+                                <figure class="image is-128x128" v-if="!business.qrcode_url">
+                                    <img src="https://versions.bulma.io/0.7.0/images/placeholders/128x128.png">
+                                </figure>
+                                <figure class="image is-128x128" v-else>
+                                    <img :src="business.qrcode_url" alt="">
+                                </figure>
+                            </div>
+                        </div>
                     </div>
-
+                    
                     <div class="column is-12 is-size-6 mt-4"><strong class="is-size-7 has-text-grey-light">Business basic information:</strong></div>
-                    <div class="column is-3">
+                    <div class="column is-4">
                         <div class="field">
                             <label for="">QR Code</label>
                             <div class="control">
@@ -237,6 +241,14 @@
                             </div>
                         </div>
                     </div>
+                    <div class="column is-3">
+                        <div class="field">
+                            <label for="">Annual payable</label>
+                            <div class="control">
+                                <input type="number" class="input is-small has-text-right" v-model="business.annual_amount">
+                            </div>
+                        </div>
+                    </div>
                     <column class="column is-12"><strong>FSIC Details:</strong></column>
                     <div class="column is-1">
                         <label for="">FSIC?</label>
@@ -252,7 +264,7 @@
                         <div class="field">
                             <label for="">FSIC Number</label>
                             <div class="control">
-                                <input type="text" class="input is-small" name="fsic_number" v-model="business.fsic_number">
+                                <input type="text" class="input is-small " name="fsic_number" v-model="business.fsic_number">
                             </div>
                         </div>
                     </div>
@@ -297,7 +309,7 @@
                         <div class="field">
                             <label for="">Capital amount</label>
                             <div class="control">
-                                <input type="number" class="input is-small" v-model="business.capitalization_amount">
+                                <input type="number" class="input is-small has-text-right" v-model="business.capitalization_amount">
                             </div>
                         </div>
                     </div>
@@ -305,7 +317,7 @@
                         <div class="field">
                             <label for="">Gross sales</label>
                             <div class="control">
-                                <input type="number" class="input is-small" v-model="business.gross_sale_amount">
+                                <input type="number" class="input is-small has-text-right" v-model="business.gross_sale_amount">
                             </div>
                         </div>
                     </div>
@@ -313,7 +325,7 @@
                         <div class="field">
                             <label for="">Total employees</label>
                             <div class="control">
-                                <input type="number" class="input is-small" v-model="business.total_employees">
+                                <input type="number" class="input is-small has-text-right" v-model="business.total_employees">
                             </div>
                         </div>
                     </div>
@@ -321,7 +333,7 @@
                         <div class="field">
                             <label for="">Total male</label>
                             <div class="control">
-                                <input type="number" class="input is-small" v-model="business.total_male">
+                                <input type="number" class="input is-small has-text-right" v-model="business.total_male">
                             </div>
                         </div>
                     </div>
@@ -329,7 +341,7 @@
                         <div class="field">
                             <label for="">Total female</label>
                             <div class="control">
-                                <input type="number" class="input is-small" v-model="business.total_female">
+                                <input type="number" class="input is-small has-text-right" v-model="business.total_female">
                             </div>
                         </div>
                     </div>
@@ -408,18 +420,20 @@
 <script>
 import axios from 'axios'
 import {toast} from 'bulma-toast'
+import Swal from 'sweetalert2'
+
 export default {
     name: 'Business',
     data() {
         return {
             busines: {},
-            owner_picture: null,
-            goods_picture: null,
-            business_permit: null,
-            owner_signature: null,
-            picture1: null,
-            picture2: null,
-            picture3: null,
+            owner_picture: '',
+            goods_picture: '',
+            permit: '',
+            owner_signature: '',
+            picture1: '',
+            picture2: '',
+            picture3: '',
             qrcode:{
                 qrcode:'',
                 qrcode_image:''
@@ -486,7 +500,7 @@ export default {
                     this.goods_picture = e.target.files[0]
                     break;
                 case "business_permit":
-                    this.business_permit=e.target.files[0]
+                    this.permit=e.target.files[0]
                     break;
                 case "owner_signature":
                     this.owner_signature=e.target.files[0]
@@ -504,6 +518,35 @@ export default {
         },
         submitForm(){
             let formData = new FormData();
+            if (this.owner_picture){
+                this.business.owner_picture=this.owner_picture
+                formData.append('owner_picture', this.business.owner_picture)
+            }
+            if (this.goods_picture){
+                this.business.goods_services_picture = this.goods_picture
+                formData.append('goods_picture', this.business.goods_services_picture)
+            }
+            if (this.permit){
+                this.business.business_permit_picture=this.permit
+                formData.append('permit', this.business.business_permit_picture)
+            }
+            if (this.owner_signature){
+                this.business.owner_signature=this.owner_signature
+                formData.append('owner_signature', this.business.owner_signature)
+            }
+            if (this.picture1){
+                this.business.picture1=this.picture1
+                formData.append('picture1', this.business.picture1)
+            }
+            if (this.picture2){
+                this.business.picture2=this.picture2
+                formData.append('picture2', this.business.picture2)
+            }
+            if (this.picture3){
+                this.business.picture3=this.picture3
+                formData.append('picture3', this.business.picture3)
+            }
+
             // if (this.owner_picture != null)
             //     formData.append('owner_picture', this.owner_picture, this.owner_picture.name)
             // if (this.goods_picture != null)
@@ -521,59 +564,69 @@ export default {
             // if (this.picture3 != null)
             //     formData.append('picture3', this.picture3, this.picture3.name)
 
-            // formData.append('qrcode', this.business.qrcode)
-            // formData.append('business_owner_number', this.business.business_owner_number)
-            // formData.append('business_name', this.business.business_name)
-            // formData.append('business_owner_name', this.business.business_owner_name)
-            // formData.append('owner_gender', this.business.owner_gender)
-            // formData.append('ownership_type', this.business.ownership_type)
-            // formData.append('is_business_permit', this.business.is_business_permit)
-            // formData.append('business_permit_status', this.business.business_permit_status)
-            // formData.append('is_notice', this.business.is_notice)
-            // formData.append('notice_remarks', this.business.notice_remarks)
-            // formData.append('business_status', this.business.business_status)
-            // formData.append('payment_type', this.business.payment_type)
-            // formData.append('inactive_remarks', this.business.inactive_remarks)
-            // formData.append('inactive_reason', this.business.inactive_reason)
-            // formData.append('fsic', this.business.fsic)
-            // formData.append('fsic_number', this.business.fsic_number)
-            // formData.append('capitalization_amount', this.business.capitalization_amount)
-            // formData.append('gross_sale_amount', this.business.gross_sale_amount)
-            // formData.append('total_employees', this.business.total_employees)
-            // formData.append('total_male', this.business.total_male)
-            // formData.append('total_female', this.business.total_female)
-            // formData.append('location_status', this.business.location_status)
-            // formData.append('application_status', this.business.application_status)
-            // formData.append('location_rental_amount', this.business.location_rental_amount)
-            // formData.append('lessor_name', this.business.lessor_name)
-            // formData.append('purok', this.business.purok)
-            // formData.append('stall_no', this.business.stall_no)
-            // formData.append('gps_altitud', this.business.gps_altitud)
-            // formData.append('gps_longitude', this.business.gps_longitude)
-            // formData.append('gps_latitude', this.business.gps_latitude)
-            // formData.append('gps_accuracy', this.business.gps_accuracy)
-            // formData.append('business_representative', this.business.business_representative)
-            // formData.append('barangay', this.business.barangay)
+            formData.append('qrcode', this.business.qrcode)
+            formData.append('business_code', this.business.business_code)
+            formData.append('business_owner_number', this.business.business_owner_number)
+            formData.append('business_name', this.business.business_name)
+            formData.append('business_owner_name', this.business.business_owner_name)
+            formData.append('owner_gender', this.business.owner_gender)
+            formData.append('ownership_type', this.business.ownership_type)
+            formData.append('is_business_permit', this.business.is_business_permit)
+            formData.append('business_permit_status', this.business.business_permit_status)
+            formData.append('is_notice', this.business.is_notice)
+            formData.append('notice_remarks', this.business.notice_remarks)
+            formData.append('business_status', this.business.business_status)
+            formData.append('payment_type', this.business.payment_type)
+            formData.append('annual_amount', this.business.annual_amount)
+            formData.append('inactive_remarks', this.business.inactive_remarks)
+            formData.append('inactive_reason', this.business.inactive_reason)
+            formData.append('fsic', this.business.fsic)
+            formData.append('fsic_number', this.business.fsic_number)
+            formData.append('capitalization_amount', this.business.capitalization_amount)
+            formData.append('gross_sale_amount', this.business.gross_sale_amount)
+            formData.append('total_employees', this.business.total_employees)
+            formData.append('total_male', this.business.total_male)
+            formData.append('total_female', this.business.total_female)
+            formData.append('location_status', this.business.location_status)
+            formData.append('application_status', this.business.application_status)
+            formData.append('location_rental_amount', this.business.location_rental_amount)
+            formData.append('lessor_name', this.business.lessor_name)
+            formData.append('purok', this.business.purok)
+            formData.append('stall_no', this.business.stall_no)
+            formData.append('gps_altitud', this.business.gps_altitud)
+            formData.append('gps_longitude', this.business.gps_longitude)
+            formData.append('gps_latitude', this.business.gps_latitude)
+            formData.append('gps_accuracy', this.business.gps_accuracy)
+            formData.append('business_representative', this.business.business_representative)
+            formData.append('barangay', this.business.barangay)
 
             this.business.submitted_from = 'web'
             this.business.created_by = this.$store.state.user.id
 
             console.log(this.business)
-            axios.patch(`/api/v1/businesses/${this.business.id}/`, this.business)
-                 .then(response => {
-                     toast ({
-                        message: 'New business was added successfully.',
-                        type: 'is-success',
-                        dismissible: true,
-                        pauseOnHover: true,
-                        duration: 2000,
-                        position: 'bottom-center',
-                     })
-                     this.$router.push("/dashboard/businesses")
-                 })
-                 .catch(error => {
-                     console.log(JSON.stringify(error))
-                 })
+            if (this.business.barangay != null){
+                axios.patch(`/api/v1/businesses/${this.business.id}/`, formData)
+                    .then(response => {
+                        toast ({
+                            message: 'New business was added successfully.',
+                            type: 'is-success',
+                            dismissible: true,
+                            pauseOnHover: true,
+                            duration: 2000,
+                            position: 'bottom-center',
+                        })
+                        this.$router.push("/dashboard/businesses")
+                    })
+                    .catch(error => {
+                        console.log(JSON.stringify(error))
+                    })
+            } else {
+                Swal.fire({
+                    title: 'Required!',
+                    text: 'Barangay is required.',
+                    icon: 'warning'
+                })
+            }
         }
     }
 }

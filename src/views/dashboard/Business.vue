@@ -25,7 +25,7 @@
             <div class="column is-8">
                 <div class="buttons is-pulled-right">
                     <router-link :to="{name: 'EditBusiness', params: {id:business.id}}" class="button is-info is-small">Edit</router-link>
-                    <button class="button is-danger is-small" @click="deleteBusiness(business)">Delete</button>
+                    <button class="button is-danger is-small" @click="deleteBusiness(business)" v-if="level=='admin'">Delete</button>
                 </div>
             </div>
             <div class="column is-6">
@@ -160,6 +160,7 @@ export default {
     data() {
         return {
             business: {},
+            level: '',
             qrcode: {},
             categories: [],
             payments: [],
@@ -201,6 +202,7 @@ export default {
         },
         getBusiness(){
             const businessId=this.$route.params.id
+            this.level = this.$store.state.user.level
             axios.get(`/api/v1/businesses/${businessId}`)
                  .then(response => {
                      this.business=response.data
@@ -209,9 +211,9 @@ export default {
                      this.getPayments(this.business.id)
 
                     this.center.lat=parseFloat(this.business.gps_latitude)
-                    console.log(parseFloat(this.business.gps_latitude))
+                    // console.log(parseFloat(this.business.gps_latitude))
                     this.center.lng=parseFloat(this.business.gps_longitude)
-                    console.log(parseFloat(this.business.gps_longitude))
+                    // console.log(parseFloat(this.business.gps_longitude))
                     this.markers[0].position.lat=parseFloat(this.business.gps_latitude)
                     this.markers[0].position.lng=parseFloat(this.business.gps_longitude)
                     this.zoom=14

@@ -19,7 +19,7 @@
                                 <td>
                                     <router-link :to="{ name: 'EditBarangay', params: {id:barangay.id}}">Edit</router-link> | 
                                     <!-- <router-link :to="{ name: 'DeleteBarangay', params: {id:barangay.id}}">Delete</router-link> -->
-                                    <a href="#" @click="deleteBarangay(barangay)">Delete</a>
+                                    <a href="#" @click="deleteBarangay(barangay)" v-if="this.$store.state.user.level=='admin'">Delete</a>
                                 </td>
                             </tr>
                         </tbody>
