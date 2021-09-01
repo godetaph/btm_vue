@@ -195,11 +195,14 @@ class BusinessViewSet(viewsets.ModelViewSet):
         # barangay_id = Barangay.objects.get(id= barangay1)
         # print("before")
         # print(serializer.validated_data['gps_latitude'])
+        
+
         if self.request.FILES:
             print("inside")
             owner_picture = self.request.FILES.get('owner_picture')
             print(owner_picture, " owner")
             if owner_picture is not None:
+                #with open(owner_picture.file.seek(0), "rb") as opened_pic:
                 serializer.save(owner_picture = owner_picture)
             
             goods_picture = self.request.FILES.get('goods_picture')
@@ -265,6 +268,7 @@ class NotificationViewSet(viewsets.ModelViewSet):
     def get_queryset(self):
         is_read=self.request.query_params.get('is_read')
         queryset=Notification.objects.all()
+
         if is_read is not None:
             queryset=queryset.filter(is_read=is_read)
         
@@ -275,13 +279,27 @@ class PeriodViewSet(viewsets. ModelViewSet):
     serializer_class=PeriodSerializer
     queryset=Period.objects.all()
 
+    def get_queryset(self):
+        active = self.request.query_params.get('active')
+        queryset = Period.objects.all()
+        print(active)
+        if active is not None:
+            queryset = queryset.filter(is_active=True)
+        
+        return queryset
+
     def perform_create(self, serializer):
         serializer.save(created_by=self.request.user)
+
+class DynamicSearchFilter(filters.SearchFilter):
+    def get_search_fields(self, view, request):
+        return request.GET.getlist('search_fields', [])
 
 #business_period_viewset
 class BusinessPeriodViewSet(viewsets.ModelViewSet):
     serializer_class=BusinessPeriodSerializer
     queryset=BusinessPeriod.objects.all()
+    filter_backends = (DynamicSearchFilter,)
     # filter_backends = [DjangoFilterBackend]
     # filterset_fields= ['period', 'business']
 

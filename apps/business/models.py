@@ -193,8 +193,8 @@ class Period(models.Model):
         class Meta:
                 ordering=["-period_year"]
         
-        def __str__(self):
-                return self.period_year
+        # def __str__(self):
+        #         return self.period_year
 
 #business_period
 class BusinessPeriod(models.Model):
