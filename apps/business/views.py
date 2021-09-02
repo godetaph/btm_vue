@@ -299,9 +299,17 @@ class DynamicSearchFilter(filters.SearchFilter):
 class BusinessPeriodViewSet(viewsets.ModelViewSet):
     serializer_class=BusinessPeriodSerializer
     queryset=BusinessPeriod.objects.all()
-    filter_backends = (DynamicSearchFilter,)
+    #filter_backends = (DynamicSearchFilter,)
     # filter_backends = [DjangoFilterBackend]
     # filterset_fields= ['period', 'business']
+    def get_queryset(self):
+        business = self.request.query_params.get('business')
+        queryset = BusinessPeriod.objects.all()
+        if business:
+
+            queryset = BusinessPeriod.objects.filter(business=business)
+        
+        return queryset
 
     def perform_create(self, serializer):
         serializer.save()

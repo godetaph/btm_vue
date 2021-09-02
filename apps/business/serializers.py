@@ -92,8 +92,9 @@ class BusinessPeriodSerializer(serializers.ModelSerializer):
     barangay=serializers.CharField(source='business.barangay.barangay_name', read_only=True)
     purok=serializers.CharField(source='business.purok', read_only=True)
     permit=serializers.CharField(source='business.is_business_permit', read_only=True)
+    period_year=serializers.CharField(source='period.period_year', read_only=True)
     
     class Meta:
         model=BusinessPeriod
         read_only_fields=("created_on",)
-        fields=("id", "period", "business", "comment", "business_name", "business_owner", "barangay", "purok", "permit", "created_by", "collector",)
+        fields=("id", "period", "business", "comment", "business_name", "business_owner", "barangay", "purok", "permit", "created_by", "collector","period_year",)
