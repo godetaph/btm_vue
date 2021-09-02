@@ -77,8 +77,8 @@
                             <div class="select is-small">
                                 <select name="gender" id="" v-model="business.owner_gender">
                                     <option value="" selected>-- Select gender --</option>
-                                    <option value="male">Male</option>
-                                    <option value="female">Female</option>
+                                    <option value="MALE">MALE</option>
+                                    <option value="FEMALE">FEMALE</option>
                                 </select>
                             </div>
                         </div>
@@ -98,7 +98,7 @@
                         <div class="select is-small">
                             <select name="barangay" id="" v-model="business.barangay">
                                 <option value="" selected>-- Select barangay --</option>
-                                <option v-for="barangay in barangays" v-bind:key="barangay.id" v-bind:value="barangay.id">{{barangay.barangay_name}}</option>
+                                <option v-for="barangay in barangays" v-bind:key="barangay.id" v-bind:value="barangay.id"><span class="is-uppercase">{{barangay.barangay_name}}</span></option>
                             </select>
                         </div>
                     </div>
@@ -158,11 +158,11 @@
                         <label for="" class="is-size-7">Ownership type</label>
                             <div class="select is-small">
                                 <select name="ownership_type" id="" v-model="business.ownership_type">
-                                    <option value="">-- Select ownership --</option>
-                                    <option value="single">Single Proprietor</option>
-                                    <option value="partnership">Partnership</option>
-                                    <option value="corporation">Corporation</option>
-                                    <option value="cooperative">Cooperative</option>
+                                    <option value="">-- SELECT OWNERSHIP--</option>
+                                    <option value="SINGLE PROPRIETOR">SINGLE PROPRIETOR</option>
+                                    <option value="PARTNERSHIP">PARTNERSHIP</option>
+                                    <option value="CORPORATION">CORPORATION</option>
+                                    <option value="COOPERATIVE">COORPERATIVE</option>
                                 </select>
                             </div>
                     </div>
@@ -170,35 +170,35 @@
                         <label for="" class="is-size-7">Business permit</label>
                         <div class="select is-small">
                             <select name="is_business_permit" id="" v-model="business.is_business_permit">
-                                <option value="">-- Select business permit? --</option>
-                                <option value="yes">Yes</option>
-                                <option value="no">No</option>
+                                <option value="">-- SELECT BUSINESS PERMIT? --</option>
+                                <option value="YES">YES</option>
+                                <option value="NO">NO</option>
                             </select>
                         </div>
                     </div>
-                    <div class="column is-4" v-if="business.is_business_permit=='no'">
+                    <div class="column is-4" v-if="business.is_business_permit=='NO'">
                         <label for="" class="is-size-7">Business permit status</label>
                         <div class="select is-small">
                             <select name="business_permit_status" id="" v-model="business.business_permit_status">
-                                <option value="" selected>-- Select business status --</option>
-                                <option value="FIRST">First notice</option>
-                                <option value="SECOND">Second notice</option>
-                                <option value="FINAL">Third notice</option>
-                                <option value="CLOSURE">Subject for closure</option>
+                                <option value="" selected>-- SELECT PERMIT STATUS --</option>
+                                <option value="FIRST NOTICE">FIRST NOTICE</option>
+                                <option value="SECOND NOTICE">SECOND NOTICE</option>
+                                <option value="FINAL NOTICE">FINAL NOTICE</option>
+                                <option value="CLOSURE">CLOSURE</option>
                             </select>
                         </div>
                     </div>
-                    <div class="column is-3" v-if="business.business_permit_status">
+                    <div class="column is-3" v-if="business.is_business_permit=='NO'">
                         <label for="" class="is-size-7">Notice status</label>
                         <div class="select is-small">
                             <select name="is_notice" id="" v-model="business.is_notice">
-                                <option value="">-- Select --</option>
-                                <option value="serve">Serve</option>
-                                <option value="unserve">Unserve</option>
+                                <option value="">-- SELECT NOTICE --</option>
+                                <option value="SERVE">SERVE</option>
+                                <option value="UNSERVE">UNSERVE</option>
                             </select>
                         </div>
                     </div>
-                    <div class="column is-9" v-if="business.is_notice">
+                    <div class="column is-9" v-if="business.is_business_permit=='NO'">
                         <div class="field">
                             <label for="" class="is-size-7">Notice status remarks</label>
                             <div class="control">
@@ -211,21 +211,21 @@
                         <label for="" class="is-size-7">Business status</label>
                         <div class="select is-small">
                             <select name="business_status" id="" v-model="business.business_status">
-                                <option value="" selected>-- Select business status --</option>
-                                <option value="ACTIVE1">Active w/o extension</option>
-                                <option value="ACTIVE2">Active with extension</option>
-                                <option value="INACTIVE">Inactive</option>
+                                <option value="" selected>-- SELECT BUSINESS STATUS --</option>
+                                <option value="ACTIVE W/O EXTENSION">ACTIVE W/O EXTENSION</option>
+                                <option value="ACTIVE WITH EXTENSION">ACTIVE WITH EXTENSION</option>
+                                <option value="INACTIVE">INACTIVE</option>
                             </select>
                         </div>
                     </div>
-                    <div class="column is-4" v-if="business.business_status=='ACTIVE1'">
+                    <div class="column is-4" v-if="business.business_status=='ACTIVE W/O EXTENSION'">
                         <label for="" class="is-size-7">Payment type</label>
                         <div class="select is-small">
                             <select name="business_status" id="" v-model="business.payment_type">
-                                <option value="" selected>-- Select payment type --</option>
-                                <option value="annual">Annual</option>
-                                <option value="semi-annual">Semi-annual</option>
-                                <option value="quarterly">Quarter</option>
+                                <option value="" selected>-- SELECT PAYMENT TYPE --</option>
+                                <option value="ANNUAL">ANNUAL</option>
+                                <option value="SEMI-ANNUAL">SEMI-ANNUAL</option>
+                                <option value="QUARTER">QUARTER</option>
                             </select>
                         </div>
                     </div>
@@ -233,10 +233,10 @@
                         <label for="" class="is-size-7">Reason for inactivity</label>
                         <div class="select is-small">
                             <select name="inactive_reason" id="" v-model="business.inactive_reason">
-                                <option value="" selected>-- Select reason inactivity --</option>
-                                <option value="temporary">Temporary closed</option>
-                                <option value="suspended">Suspended</option>
-                                <option value="closed">Closed</option>
+                                <option value="" selected>-- SELECT INACTIVITY STATUS --</option>
+                                <option value="TEMPORARY CLOSED">Temporary closed</option>
+                                <option value="SUSPENDED">SUSPENDED</option>
+                                <option value="CLOSED">CLOSED</option>
                             </select>
                         </div>
                     </div>
@@ -269,13 +269,13 @@
                         <label for="" class="is-size-7">FSIC?</label>
                         <div class="select is-small">
                             <select name="fsic" id="" v-model="business.fsic">
-                                <option value="" selected>-- Select --</option>
-                                <option value="yes">Yes</option>
-                                <option value="no">No</option>
+                                <option value="" selected>-- SELECT FSIC --</option>
+                                <option value="YES">YES</option>
+                                <option value="NO">NO</option>
                             </select>
                         </div>
                     </div>
-                    <div class="column is-2" v-if="business.fsic=='yes'">
+                    <div class="column is-2" v-if="business.fsic=='YES'">
                         <div class="field">
                             <label for="" class="is-size-7">FSIC Number</label>
                             <div class="control">
@@ -287,13 +287,13 @@
                         <label for="" class="is-size-7">Location status</label>
                         <div class="select is-small">
                             <select name="location_status" id="" v-model="business.location_status">
-                                <option value="" selected>-- Select --</option>
-                                <option value="owned">Owned</option>
-                                <option value="rented">Rented</option>
+                                <option value="" selected>-- SELECT LOCATION STATUS --</option>
+                                <option value="OWNED">OWNED</option>
+                                <option value="RENTED">RENTED</option>
                             </select>
                         </div>
                     </div>
-                    <div class="column is-2" v-if="business.location_status=='rented'">
+                    <div class="column is-2" v-if="business.location_status=='RENTED'">
                         <div class="field">
                             <label for="" class="is-size-7">Rental amount</label>
                             <div class="control">
@@ -301,7 +301,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="column is-6" v-if="business.location_status=='rented'">
+                    <div class="column is-6" v-if="business.location_status=='RENTED'">
                         <div class="field">
                             <label for="" class="is-size-7">Lessor name</label>
                             <div class="control">
@@ -314,9 +314,9 @@
                         <label for="" class="is-size-7">Application status</label>
                         <div class="select is-small">
                             <select name="applicationn_status" id="" v-model="business.application_status">  
-                                <option value="" selected>-- Select --</option>
-                                <option value="new">New</option>
-                                <option value="renew">Renewal</option>
+                                <option value="" selected>-- SELECT APPLICATION STATUS --</option>
+                                <option value="NEW">NEW</option>
+                                <option value="RENEW">RENEWAL</option>
                             </select>
                         </div>
                     </div>
