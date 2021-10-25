@@ -36,10 +36,10 @@ DEBUG = True
 ALLOWED_HOSTS = ['127.0.0.1', 'localhost', 'btm-101.herokuapp.com']
 
 CORS_ALLOWED_ORIGINS = [
-    "https://midsayap-btm.netlify.app",
-    # "http://localhost:8080",
-    "https://btm-101.herokuapp.com"
-    # "http://127.0.0.1:8000"
+    # "https://midsayap-btm.netlify.app",
+    "http://localhost:8080",
+    # "https://btm-101.herokuapp.com"
+    "http://127.0.0.1:8000"
 ]
 
 REST_FRAMEWORK = {
@@ -182,7 +182,7 @@ AWS_QUERYSTRING_AUTH = False
 
 # DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
 # AWS_ACCESS_KEY_ID = 'AKIATX27XVP6LKYVSC7M'
-# AWS_SECRET_ACCESS_KEY = '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'
+# AWS_SECRET_ACCESS_KEY = ''
 # AWS_STORAGE_BUCKET_NAME = 'btm-101'
 # AWS_QUERYSTRING_AUTH = False
 
