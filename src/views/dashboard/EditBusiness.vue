@@ -669,34 +669,34 @@ export default {
             this.business.modified_by = this.$store.state.user.id
 
             let formData = new FormData();
-            if (this.owner_picture){
-                this.business.owner_picture=this.owner_picture
-                formData.append('owner_picture', this.business.owner_picture)
-            }
-            if (this.goods_picture){
-                this.business.goods_services_picture = this.goods_picture
-                formData.append('goods_picture', this.business.goods_services_picture)
-            }
-            if (this.permit){
-                this.business.business_permit_picture=this.permit
-                formData.append('permit', this.business.business_permit_picture)
-            }
-            if (this.owner_signature){
-                this.business.owner_signature=this.owner_signature
-                formData.append('owner_signature', this.business.owner_signature)
-            }
-            if (this.picture1){
-                this.business.picture1=this.picture1
-                formData.append('picture1', this.business.picture1)
-            }
-            if (this.picture2){
-                this.business.picture2=this.picture2
-                formData.append('picture2', this.business.picture2)
-            }
-            if (this.picture3){
-                this.business.picture3=this.picture3
-                formData.append('picture3', this.business.picture3)
-            }
+            // if (this.owner_picture){
+            //     this.business.owner_picture=this.owner_picture
+            //     formData.append('owner_picture', this.business.owner_picture)
+            // }
+            // if (this.goods_picture){
+            //     this.business.goods_services_picture = this.goods_picture
+            //     formData.append('goods_picture', this.business.goods_services_picture)
+            // }
+            // if (this.permit){
+            //     this.business.business_permit_picture=this.permit
+            //     formData.append('permit', this.business.business_permit_picture)
+            // }
+            // if (this.owner_signature){
+            //     this.business.owner_signature=this.owner_signature
+            //     formData.append('owner_signature', this.business.owner_signature)
+            // }
+            // if (this.picture1){
+            //     this.business.picture1=this.picture1
+            //     formData.append('picture1', this.business.picture1)
+            // }
+            // if (this.picture2){
+            //     this.business.picture2=this.picture2
+            //     formData.append('picture2', this.business.picture2)
+            // }
+            // if (this.picture3){
+            //     this.business.picture3=this.picture3
+            //     formData.append('picture3', this.business.picture3)
+            // }
             formData.append('qr_code', this.business.qr_code)
             // formData.append('qrcode', this.business.qrcode)
             formData.append('business_code', this.business.business_code)
