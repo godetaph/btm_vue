@@ -13,6 +13,7 @@
                 </div>
             </div>
             <div class="columns" v-if="showAdvanced">
+                
                 <div class="column is-3">
                     <div class="select is-small ">
                         <select name="" id="" class="select" @change="showValue($event)">
@@ -107,6 +108,11 @@
                         </select>
                     </div>
                 </div>
+                <div class="column is-4 control" v-if="values != ''">
+                    <!-- <router-link to="#" class="button is-success mb-4 is-small" @click="generateReport()">Print | <span class="ml-1">{{this.values}}</span></router-link> -->
+                    <button class="button is-success mb-4 is-small" @click="getBusinessesReport()">
+                        Print | <span class="ml-1">{{this.values}}</span></button>
+                </div>
             </div>
         </form>
         <hr>
@@ -190,6 +196,84 @@
                 </div>
             </template>
         </modal>
+
+        
+            <vue3-html2pdf
+                    :show-layout="false"
+                    :float-layout="true"
+                    :enable-download="false"
+                    :preview-modal="true"
+                    :paginate-elements-by-height="800"
+                    :pdf-quality="2"
+                    :manual-pagination="true"
+                    pdf-content-width="800px"
+                    :html-to-pdf-options="htmlToPdfOptions"
+                    
+                    @hasStartedGeneration="hasStartedGeneration()"
+                    @hasGenerated="hasGenerated($event)"
+                    @beforeDownload="beforeDownload($event)"
+                    ref="html2Pdf"
+                >
+                    <template v-slot:pdf-content>
+                        <!-- PDF Content Here -->
+                        <h4 class="has-text-centered">Municipality of Midsayap</h4>
+                        <h4 class="has-text-centered" style="font-weight: bold;">Municipal Treasurer Office</h4>
+                        <h4 class="has-text-centered mt-3">List of Business</h4>
+                        <h5 class="has-text-centered"><span class="is-uppercase">{{values}}</span> - <span class="is-uppercase">{{query}}</span></h5>
+                            <div style="margin: 10px;">
+                                <table class="table is-bordered is-narrow ml-1 mt-3" style="width:100%; border: 1px solid #000;">
+                                    <thead>
+                                        <tr>
+                                            <th class="is-size-7" style="width:5%;">#</th>
+                                            <th class="is-size-7" style="width:30%;">Business name</th>
+                                            <th class="is-size-7" style="width:30%;">Owner name</th>
+                                            <th class="is-size-7" style="width:10%;">Contact</th>
+                                            <th class="is-size-7" style="width:15%;">Barangay</th>
+                                            <th class="is-size-7" style="width:10%;">Purok</th>
+                                            <!-- <th>Stall no</th> -->
+                                            <!-- <th>Permit</th>
+                                            <th>Appln</th>
+                                            <th class="has-text-right">Capital</th>
+                                            <th class="has-text-right">Gross</th> -->
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr v-for="(business, index) in businessReport" v-bind:key="business.id" :class="{'has-text-danger': business.is_business_permit=='no'}">
+                                            <!-- <td class="is-uppercase">{{business.business_name}}</td> -->
+                                            <td class="is-size-7">{{index + 1}}</td>
+                                            <td class="is-uppercase is-size-7"> {{business.business_name}} </td>
+                                            <td class="is-uppercase is-size-7">{{business.business_owner_name}}</td>
+                                            <td class="is-size-7">{{business.business_owner_number}}</td>
+                                            <td class="is-size-7" v-if="business.barangay">{{business.bar_name}}</td>
+                                            <td v-else>-</td>
+                                            <td class="is-size-7">{{business.purok}}</td>
+                                            <!-- <td>{{business.stall_no}}</td> -->
+                                            <!-- <td>{{business.is_business_permit}}</td>
+                                            <td>{{business.application_status}}</td>
+                                            <td class="has-text-right">{{Number(business.capitalization_amount).toLocaleString('en-US', {minimumFractionDigits:2, maximumFractionDigits:2})}}</td>
+                                            <td class="has-text-right">{{Number(business.gross_sale_amount).toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})}}</td> -->
+                                            
+                                        </tr>
+                                        
+                                    </tbody>
+                                    <!-- <tfoot>
+                                        <td><strong>Total count:</strong></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td class="has-text-right"><strong>{{businesess.length}}</strong> of <strong>{{this.counts}}</strong> </td>
+                                    </tfoot> -->
+                                </table>
+                            </div>
+                    </template>
+                </vue3-html2pdf>
+            
         
     </div>
 </template>
@@ -197,14 +281,17 @@
 <script>
 import axios from 'axios'
 import Modal from './Modal.vue'
+import Vue3Html2pdf from 'vue3-html2pdf'
 export default {
     name: 'Businesses',
     components: {
-        Modal
+        Modal, Vue3Html2pdf
     },
+    
     data() {
         return {
             businesess: [],
+            businessReport: [],
             barangays: [],
             currentPage: 1,
             showNext: false,
@@ -212,8 +299,33 @@ export default {
             showAdvanced: false,
             query: '',
             values: '',
-            counts:0
+            counts:0,
+            filename: 'ok.pdf'
         }
+    },
+    computed: {
+        // ...mapFields(["controlValue"]),
+
+        htmlToPdfOptions() {
+            return {
+                margin: [0.2, 0, 0.5, 0],
+                filename: this.filename,
+                image: {
+                    type: "jpeg",
+                    quality: 0.98,
+                    },
+                enableLinks: true,
+                html2canvas: {
+                    scale: 3,
+                    useCORS: true,
+                    },
+                jsPDF: {
+                    unit: "in",
+                    format: "letter",
+                    orientation: "portrait",
+                    },
+            };
+        },
     },
     mounted() {
         this.getBusinesses()
@@ -234,6 +346,7 @@ export default {
                      this.showNext=false
                      this.showPrev=false
                      this.businesess=response.data.results
+                     //console.log(this.businesess)
                      this.counts=response.data.count
                     //  for(let i=0; i < response.data.length; i++){
                     //      this.businesess.push(response.data[i])
@@ -245,6 +358,26 @@ export default {
                          this.showPrev=true
                      }
                      //this.businesses = response.data
+                 })
+                 .catch(error => {
+                     console.log(error)
+                 })
+        },
+        getBusinessesReport() {
+            //axios.get(`/api/v1/businesses/?size=10`) 
+            axios.get(`/api/v1/businesses/?search=${this.query}`) 
+                 .then(response => {
+                    //console.log(response)
+                     this.businessReport=response.data
+
+                     //console.log(this.businesess)
+                     //this.counts=response.data.count
+                    //  for(let i=0; i < response.data.length; i++){
+                    //      this.businesess.push(response.data[i])
+                    //  }
+                     //this.businesses = response.data
+                    
+                    this.generateReport()
                  })
                  .catch(error => {
                      console.log(error)
@@ -269,7 +402,23 @@ export default {
                 this.getBarangays()
             }
             this.query=''
-        }
+            this.filename=this.values
+        },
+        generateReport() {
+            this.$refs.html2Pdf.generatePdf()
+
+        },
+        async beforeDownload ({ html2pdf, options, pdfContent }) {
+            await html2pdf().set(options).from(pdfContent).toPdf().get('pdf').then((pdf) => {
+                const totalPages = pdf.internal.getNumberOfPages()
+                for (let i = 1; i <= totalPages; i++) {
+                    pdf.setPage(i)
+                    pdf.setFontSize(10)
+                    pdf.setTextColor(150)
+                    pdf.text('Page ' + i + ' of ' + totalPages, (pdf.internal.pageSize.getWidth() * 0.88), (pdf.internal.pageSize.getHeight() - 0.3))
+                } 
+            }).save()
+        },
     }
 }
 </script>

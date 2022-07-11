@@ -36,9 +36,13 @@
                                 <input type="text" style="width:250px" class="input is-small" name="qr_code" v-model="business.qr_code" disabled>
                             </div>
 
-                            <label for="" class="is-size-7">Business code</label>
+                            <label for="" class="is-size-7">Business Identification No. (BIN)</label>
                             <div class="control">
                                 <input type="text" class="input is-small" name="business_code" v-model="business.business_code">
+                            </div>
+                            <label for="" class="is-size-7">Business Permit No.</label>
+                            <div class="control">
+                                <input type="text" class="input is-small" name="business_permit" v-model="business.business_permit">
                             </div>
                         </div>
                     </div>
@@ -675,6 +679,7 @@ export default {
             formData.append('business_code', this.business.business_code)
             formData.append('business_owner_number', this.business.business_owner_number)
             formData.append('business_name', this.business.business_name)
+            formData.append('business_permit', this.business.business_permit)
             formData.append('business_owner_name', this.business.business_owner_name)
             formData.append('owner_gender', this.business.owner_gender)
             formData.append('ownership_type', this.business.ownership_type)
@@ -723,7 +728,7 @@ export default {
             axios.patch(`/api/v1/businesses/${businessId}/`, formData)
                  .then(response => {
                      toast ({
-                        message: 'New business was added successfully.',
+                        message: 'Updated business information successfully.',
                         type: 'is-success',
                         dismissible: true,
                         pauseOnHover: true,

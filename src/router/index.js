@@ -40,6 +40,9 @@ import UploadCollection from '../views/dashboard/UploadCollection'
 import Setting from '../views/dashboard/Setting'
 import EditTeam from '../views/dashboard/EditTeam'
 import ScanQrCode from '../views/dashboard/ScanQrCode.vue'
+import SmsHome from '../views/dashboard/SmsHome.vue'
+import Reports from '../views/dashboard/Reports.vue'
+import ReportPrint from '../views/dashboard/ReportPrint.vue'
 
 import store from '../store'
 
@@ -363,6 +366,30 @@ const routes = [
     path: '/dashboard/upload-collection',
     name: 'UploadCollection',
     component: UploadCollection,
+    meta: {
+      requireLogin: true
+    }
+  },
+  {
+    path: '/dashboard/sms-home',
+    name: 'SmsHome',
+    component: SmsHome,
+    meta: {
+      requireLogin: true
+    }
+  },
+  {
+    path: '/dashboard/reports',
+    name: 'Reports',
+    component: Reports,
+    meta: {
+      requireLogin: true
+    }
+  },
+  {
+    path: '/dashboard/report_print',
+    name: 'ReportPrint',
+    component: ReportPrint,
     meta: {
       requireLogin: true
     }

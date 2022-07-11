@@ -35,7 +35,7 @@ export default {
                  .catch(error => JSON.stringify(error))
         },
         logout() {
-            axios.post("/api/v1/token/logout/")
+            axios.post("/api/v1/token/logout/", this.$store.state.refresh_token)
                  .then(response => {
                      axios.defaults.headers.common['Authorization'] = ""
                      localStorage.removeItem('username')

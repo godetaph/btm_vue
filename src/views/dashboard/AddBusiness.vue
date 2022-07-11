@@ -27,9 +27,13 @@
                                 <input type="text" class="input is-small" name="qr_code" v-model="business.qr_code" disabled>
                             </div>
 
-                            <label for="">Business code</label>
+                            <label for="">Business Identification No. (BIN)</label>
                             <div class="control">
-                                <input type="text" class="input is-small" name="qr_code" v-model="business.business_code">
+                                <input type="text" class="input is-small" name="business_code" v-model="business.business_code">
+                            </div>
+                            <label for="">Business Permit No.</label>
+                            <div class="control">
+                                <input type="text" class="input is-small" name="business_permit" v-model="business.business_permit">
                             </div>
                         </div>
                     </div>
@@ -566,6 +570,7 @@ export default {
 
             formData.append('qrcode', this.business.qrcode)
             formData.append('business_code', this.business.business_code)
+            formData.append('business_permit', this.bussiness_permit)
             formData.append('business_owner_number', this.business.business_owner_number)
             formData.append('business_name', this.business.business_name)
             formData.append('business_owner_name', this.business.business_owner_name)
