@@ -170,7 +170,7 @@
                 <td></td>
                 <td></td>
                 <td></td>
-                <td class="has-text-right"><strong>{{businesess.length}}</strong> of <strong>{{this.counts}}</strong> </td>
+                <td class="has-text-right"><strong>{{this.noPage}}</strong> of <strong>{{this.counts}}</strong> </td>
             </tfoot>
         </table>
         <div class="buttons">
@@ -300,7 +300,9 @@ export default {
             query: '',
             values: '',
             counts:0,
-            filename: 'ok.pdf'
+            filename: 'ok.pdf',
+            noPage: 0,
+            totalPage: 0,
         }
     },
     computed: {
@@ -334,10 +336,12 @@ export default {
         loadNext() {
             this.currentPage += 1
             this.getBusinesses()
+            this.noPage += this.businesess.length
         },
         loadPrev() {
             this.currentPage -= 1
             this.getBusinesses()
+            this.noPage -= this.businesess.length
         },
         getBusinesses() {
             //axios.get(`/api/v1/businesses/?size=10`) 
@@ -346,8 +350,16 @@ export default {
                      this.showNext=false
                      this.showPrev=false
                      this.businesess=response.data.results
-                     //console.log(this.businesess)
+                    //  console.log(response.data)
                      this.counts=response.data.count
+                    if (this.counts < this.noPage ){
+                        this.noPage = this.counts
+                        }
+                     if (this.currentPage <= 1){
+                        this.noPage = this.businesess.length
+                     }
+                    //  this.noPage = this.currentPage * this.businesess.length
+
                     //  for(let i=0; i < response.data.length; i++){
                     //      this.businesess.push(response.data[i])
                     //  }

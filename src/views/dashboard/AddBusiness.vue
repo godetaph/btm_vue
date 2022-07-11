@@ -483,15 +483,6 @@ export default {
                      console.log(JSON.stringify(error))
                  })
         },
-        // getCategories() {
-        //     axios.get('/api/v1/categories/')
-        //          .then(response => {
-        //              this.categories = response.data
-        //          })
-        //          .catch(error => {
-        //              console.log(JSON.stringify(error))
-        //          })
-        // },
         onFileChange(e) {
             console.log(e)
             let inputName = e.srcElement.name;
@@ -551,26 +542,9 @@ export default {
                 formData.append('picture3', this.business.picture3)
             }
 
-            // if (this.owner_picture != null)
-            //     formData.append('owner_picture', this.owner_picture, this.owner_picture.name)
-            // if (this.goods_picture != null)
-            //     formData.append('goods_picture', this.goods_picture, this.goods_picture.name)
-            // if (this.business_permit != null)
-            //     formData.append('business_permit', this.business_permit, this.business_permit.name)
-            // if (this.owner_signature != null)
-            //     formData.append('owner_signature', this.owner_signature, this.owner_signature.name)
-            // if (this.picture1 != null)
-            //     formData.append('picture1', this.picture1, this.picture1.name)
-            // if (this.picture2 != null)
-            //     formData.append('picture2', this.picture2, this.picture2.name)
-            // if (this.picture2 != null)
-            //     formData.append('picture2', this.picture2, this.picture2.name)
-            // if (this.picture3 != null)
-            //     formData.append('picture3', this.picture3, this.picture3.name)
-
             formData.append('qrcode', this.business.qrcode)
             formData.append('business_code', this.business.business_code)
-            formData.append('business_permit', this.bussiness_permit)
+            formData.append('business_permit', this.business.business_permit)
             formData.append('business_owner_number', this.business.business_owner_number)
             formData.append('business_name', this.business.business_name)
             formData.append('business_owner_name', this.business.business_owner_name)

@@ -13,7 +13,7 @@
                                 <img src="https://versions.bulma.io/0.7.0/images/placeholders/128x128.png">
                             </figure>
                             <figure class="image is-128x128" v-else>
-                                <img :src="qrcode.qrcode_image">
+                                <img id="qr" :src="qrcode.qrcode_image">
                             </figure>
                         </div>
                     </div>
@@ -539,13 +539,36 @@ export default {
         getQrcode(qrcode) {
             axios.get(`/api/v1/qrcodes?qr_code=${qrcode}`)
                  .then(response => {
-                     this.qrcode=response.data[0]
-                     console.log(this.qrcode.id + ' - qrcode1')
+                    this.qrcode=response.data[0]
+                    console.log(this.qrcode.qrcode_image)
+                    let qc = "_" + qrcode
+
+                    let img = document.createElement('img')
+                    img.src = this.qrcode.qrcode_image
+                    img.onerror = function() {
+                        axios.get(`/api/v1/qrcodes?qr_code=${qc}`)
+                             .then(response => {
+                                this.qrcode_1 = response.data[0]
+                             })
+                             .catch(error => {
+                                console.log(JSON.stringify(error))
+                             })
+
+                        // var img1 = document.getElementById('qr')
+                        // img1.src = 'https://versions.bulma.io/0.7.0/images/placeholders/128x128.png'
+
+                    }
+
+                    //  console.log(this.qrcode.id + ' - qrcode1')
+                    
                      this.qr_id = this.qrcode.id
                  })
                  .catch(error => {
                      console.log(JSON.stringify(error))
                  })
+        },
+        imageOnError(){
+            alert("Error loading image")
         },
         onFileChange(e){
             console.log(e)
