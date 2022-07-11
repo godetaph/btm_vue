@@ -17,7 +17,7 @@
                             </figure>
                         </div>
                     </div>
-                    <!-- <div class="column is-6">               
+                    <div class="column is-6">               
                         <div class="box ml-2">
                             <figure class="image is-128x128" v-if="!business.owner_picture">
                                 <img src="https://versions.bulma.io/0.7.0/images/placeholders/128x128.png">
@@ -26,7 +26,7 @@
                                 <img :src="business.owner_picture">
                             </figure>
                         </div>
-                    </div> -->
+                    </div>
                 </div>
                 <div class="column is-12 mb-4">
                     <div class="columns">
@@ -746,7 +746,7 @@ export default {
             
 
             //console.log(this.formData)
-            console.log(this.business)
+            // console.log(this.business)
 
             axios.patch(`/api/v1/businesses/${businessId}/`, formData)
                  .then(response => {
