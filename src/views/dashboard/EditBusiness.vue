@@ -577,16 +577,16 @@ export default {
                 case "owner_picture":
                     this.owner_picture = e.target.files[0]
                     // this.business.owner_picture=e.target.files[0]
-                    console.log(this.business.owner_picture)
-                    console.log(this.owner_picture)
+                    // console.log(this.business.owner_picture)
+                    // console.log(this.owner_picture)
                     this.is_owner_pic=true
                     break;
                 case "goods_picture":
                     this.goods_picture = e.target.files[0]
                     // this.business.goods_services_picture = e.target.files[0]
                     this.is_goods_pic=true
-                    console.log(this.goods_picture + " 01")
-                    console.log(this.business.goods_services_picture + "02")
+                    // console.log(this.goods_picture + " 01")
+                    // console.log(this.business.goods_services_picture + "02")
                     break;
                 case "permit":
                     this.permit=e.target.files[0]
@@ -614,6 +614,21 @@ export default {
                     break;
                 case 'goods_picture':
                     this.business.goods_services_picture=''
+                    break;
+                case 'permit':
+                    this.business.business_permit_picture=''
+                    break;
+                case 'owner_signature':
+                    this.business.owner_signature=''
+                    break;
+                case 'picture1':
+                    this.business.picture1=''
+                    break;
+                case 'picture2':
+                    this.business.picture2=''
+                    break;
+                case 'picture3':
+                    this.business.picture3=''
                     break;
             }
             console.log(this.business.owner_picture)

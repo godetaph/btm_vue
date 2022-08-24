@@ -76,7 +76,7 @@ export default {
     },
     watch: {
         notificationCount: function() {
-            console.log(this.notificationCount + " - watcher")
+            // console.log(this.notificationCount + " - watcher")
         }
     },
     computed: {
